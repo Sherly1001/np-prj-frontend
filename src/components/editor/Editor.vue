@@ -5,9 +5,9 @@
                 <div id="editorCode" class="editor__code">
                     <v-ace-editor
                         v-model:value="content"
+                        v-model:theme="theme"
                         lang="javascript"
                         mode="javascript"
-                        theme="dracula"
                         style="height: 650px" />
                 </div>
             </div>
@@ -25,27 +25,34 @@
             </div>
         </div>
     </div>
+
+    <Settings @get-theme="getThemeData"/>
 </template>
 
 <script>
 import { VAceEditor } from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/theme-dracula';
+import 'ace-builds/src-noconflict/theme-chrome';
 import 'ace-builds/src-noconflict/mode-javascript';
+import Settings from '../Settings.vue'
 
 export default {
     name: 'Editor',
+
+    components: {
+        VAceEditor,
+        Settings,
+    },
+
     data() {
         return {
             content: '',
             consoleMessages : {
                 message: "Code run here",
                 class: "log log--string"
-            }
+            },
+            theme: "dracula"
         }
-    },
-
-    components: {
-        VAceEditor,
     },
 
     computed: {
@@ -68,6 +75,9 @@ export default {
             newLogItem.appendChild(newLogText);
 
             this.consoleLogList.appendChild(newLogItem);
+        },
+        getThemeData(theme) {
+            this.theme = theme.value
         }
     },
 }

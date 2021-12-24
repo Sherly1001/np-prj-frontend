@@ -3,7 +3,6 @@
   <section class="main--content">
     <div class="main__wrapper">
       <Editor />
-      <Settings />
     </div>
   </section>
 </template>
@@ -11,14 +10,12 @@
 <script>
 import Editor from './components/editor/Editor.vue'
 import Header from './components/Header.vue'
-import Settings from './components/Settings.vue'
 
 export default {
   name: 'App',
   components: {
     Editor,
     Header,
-    Settings,
   }
 }
 </script>
