@@ -5,15 +5,15 @@
                 <div id="editorCode" class="editor__code">
                     <v-ace-editor
                         v-model:value="content"
-                        @init="editorInit"
                         lang="javascript"
+                        mode="javascript"
                         theme="dracula"
                         style="height: 650px" />
                 </div>
             </div>
             <div class="editor__footer">
                 <div class="editor__footer--left">
-                    <button class="editor__btn editor__run">Run</button>
+                    <button @click="onRun()" class="editor__btn editor__run">Run</button>
                     <button @click="onReset()" class="editor__btn editor__reset">Reset</button>
                 </div>
                 <div class="editor__footer--right">
@@ -30,6 +30,7 @@
 <script>
 import { VAceEditor } from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/theme-dracula';
+import 'ace-builds/src-noconflict/mode-javascript';
 
 export default {
     name: 'Editor',
@@ -44,6 +45,9 @@ export default {
     methods: {
         onReset() {
             this.content = '';
+        },
+        onRun() {
+            // this.content = 'Code run here';
         }
     }
 }
