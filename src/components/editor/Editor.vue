@@ -36,20 +36,40 @@ export default {
     name: 'Editor',
     data() {
         return {
-            content: ''
+            content: '',
+            consoleMessages : {
+                message: "Code run here",
+                class: "log log--string"
+            }
         }
     },
+
     components: {
         VAceEditor,
     },
+
+    computed: {
+        consoleLogList() {
+            return document.querySelector('.editor__console-logs')
+        }
+    },
+
     methods: {
         onReset() {
             this.content = '';
         },
         onRun() {
-            // this.content = 'Code run here';
+            const newLogItem = document.createElement('li');
+            const newLogText = document.createElement('pre');
+
+            newLogText.className = "log log--string";
+            newLogText.textContent = "Code run here";
+
+            newLogItem.appendChild(newLogText);
+
+            this.consoleLogList.appendChild(newLogItem);
         }
-    }
+    },
 }
 </script>
 
