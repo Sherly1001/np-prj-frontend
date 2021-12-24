@@ -27,15 +27,30 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+
+    <v-ace-editor
+    v-model="content"
+    @init="editorInit"
+    lang="html"
+    theme="dracula"
+    style="height: 500px" />
   </div>
 </template>
 
 <script>
+import { VAceEditor } from 'vue3-ace-editor';
+import 'ace-builds/src-noconflict/theme-dracula';
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
-  }
+  },
+
+  components: {
+    VAceEditor,
+  },
+  methods: {
+  },
 }
 </script>
 

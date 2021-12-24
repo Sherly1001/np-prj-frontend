@@ -1,0 +1,283 @@
+<template>
+    <div class="editor">
+        <div class="editor__wrapper">
+            <div class="editor__body">
+                <div id="editorCode" class="editor__code">
+                    <v-ace-editor
+                        v-model="content"
+                        @init="editorInit"
+                        lang="html"
+                        theme="dracula"
+                        style="height: 650px" />
+                </div>
+            </div>
+            <div class="editor__footer">
+                <div class="editor__footer--left">
+                    <button class="editor__btn editor__run">Run</button>
+                    <button class="editor__btn editor__reset">Reset</button>
+                </div>
+                <div class="editor__footer--right">
+                    <div class="editor__console">
+                        <ul class="editor__console-logs">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { VAceEditor } from 'vue3-ace-editor';
+import 'ace-builds/src-noconflict/theme-dracula';
+export default {
+    name: 'Editor',
+    components: {
+        VAceEditor,
+    }
+}
+</script>
+
+<style scoped>
+.editor {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.editor__wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--editor-bg);
+    padding: 2em;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.editor__body {
+    flex: 1;
+}
+
+.editor__footer {
+    display: flex;
+}
+
+.editor__footer--left {
+    display: flex;
+    flex-direction: column;
+}
+
+.editor__footer--right {
+    flex: 1;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.editor__btn {
+    border: 0;
+    padding: .5em;
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 5px;
+    margin-top: 1em;
+    width: 100px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.editor__console {
+    background-color: #fff;
+    width: 100%;
+    height: 130px;
+    margin-top: .9em;
+    border: 1px solid var(--editor-border);
+    overflow: auto;
+}
+
+.editor__code {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--editor-border);
+}
+
+/* Editor Console Logs */
+.editor__console-logs {
+    padding: 10px;
+    list-style: none;
+}
+
+.editor__console-logs li pre {
+    font-size: .9em;
+    font-family: Inconsolata, sans-serif;
+}
+
+.ace_gutter {
+    border-left: 5px solid var(--editor-border);
+}
+
+.log--default {
+    color: #000;
+}
+
+.log--string {
+    color: #48BF0A;
+}
+
+.log--number {
+    color: #48BF0A;
+}
+
+.log--boolean {
+    color: blue;
+}
+
+.log--undefined {
+    color: grey;
+}
+
+.log--error {
+    color: red;
+}
+
+.log--object {
+    color: darkcyan;
+}
+
+.log--array {
+    color: darkblue;
+}
+
+.log--function {
+    color: yellow;
+}.editor {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.editor__wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--editor-bg);
+    padding: 2em;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.editor__body {
+    flex: 1;
+}
+
+.editor__footer {
+    display: flex;
+}
+
+.editor__footer--left {
+    display: flex;
+    flex-direction: column;
+}
+
+.editor__footer--right {
+    flex: 1;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.editor__btn {
+    border: 0;
+    padding: .5em;
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 5px;
+    margin-top: 1em;
+    width: 100px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.editor__console {
+    background-color: #fff;
+    width: 100%;
+    height: 130px;
+    margin-top: .9em;
+    border: 1px solid var(--editor-border);
+    overflow: auto;
+}
+
+.editor__code {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--editor-border);
+}
+
+/* Editor Console Logs */
+.editor__console-logs {
+    padding: 10px;
+    list-style: none;
+}
+
+.editor__console-logs li pre {
+    font-size: .9em;
+    font-family: Inconsolata, sans-serif;
+}
+
+.ace_gutter {
+    border-left: 5px solid var(--editor-border);
+}
+
+.log--default {
+    color: #000;
+}
+
+.log--string {
+    color: #48BF0A;
+}
+
+.log--number {
+    color: #48BF0A;
+}
+
+.log--boolean {
+    color: blue;
+}
+
+.log--undefined {
+    color: grey;
+}
+
+.log--error {
+    color: red;
+}
+
+.log--object {
+    color: darkcyan;
+}
+
+.log--array {
+    color: darkblue;
+}
+
+.log--function {
+    color: yellow;
+}
+</style>
