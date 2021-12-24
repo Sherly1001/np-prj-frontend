@@ -4,9 +4,9 @@
             <div class="editor__body">
                 <div id="editorCode" class="editor__code">
                     <v-ace-editor
-                        v-model="content"
+                        v-model:value="content"
                         @init="editorInit"
-                        lang="html"
+                        lang="javascript"
                         theme="dracula"
                         style="height: 650px" />
                 </div>
@@ -14,7 +14,7 @@
             <div class="editor__footer">
                 <div class="editor__footer--left">
                     <button class="editor__btn editor__run">Run</button>
-                    <button class="editor__btn editor__reset">Reset</button>
+                    <button @click="onReset()" class="editor__btn editor__reset">Reset</button>
                 </div>
                 <div class="editor__footer--right">
                     <div class="editor__console">
@@ -30,10 +30,21 @@
 <script>
 import { VAceEditor } from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/theme-dracula';
+
 export default {
     name: 'Editor',
+    data() {
+        return {
+            content: ''
+        }
+    },
     components: {
         VAceEditor,
+    },
+    methods: {
+        onReset() {
+            this.content = '';
+        }
     }
 }
 </script>
