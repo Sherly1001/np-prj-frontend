@@ -5,8 +5,7 @@
                 Collaborative coding 
             </div>
             <div class="header--right">
-                <div class="btn-share">Share+</div>
-                <button type="button" class="btn btn-primary btn-share">Share+</button>
+                <button type="button" class="btn btn-primary">Share +</button>
                 <div class="avatar"></div>
             </div>
         </div>
@@ -42,12 +41,5 @@
     display: flex;
     text-align: center;
     align-items: center;
-}
-
-.btn-share {
-    width: 100px;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: 600;
 }
 </style>

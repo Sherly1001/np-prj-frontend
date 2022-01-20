@@ -5,19 +5,25 @@
             <div class="settings_option">
                 <div class="settings_theme">
                     <p>Theme</p>
-                    <select v-model="selected" @change="onChange()">
+                    <select 
+                        v-model="selected" 
+                        @change="onChange()" 
+                        class="form-select" 
+                        aria-label="Default select example">
                         <option v-for="theme in themes" :key="theme.id" :value="theme.id">
                             {{ theme.name }}
                         </option>
                     </select>
-
-                    <b-form-select v-model="selected" :options="themes"></b-form-select>
                     
                 </div>
                 <div class="settings_language">
                     <p>Language</p>
-                    <select :selected="lang_seleted">
-                        <!-- <option value="0">Select Themes</option> -->
+                    
+                    <select 
+                        v-model="lang_seleted" 
+                        @change="onLangChange()" 
+                        class="form-select" 
+                        aria-label="Default select example">
                         <option v-for="lang in langs" :key="lang.id" :value="lang.id">
                             {{ lang.name }}
                         </option>
@@ -90,17 +96,54 @@ export default {
             langs: [
                 {   
                     id: 0, 
-                    name: "Javascript"
+                    name: "Javascript",
+                    value: "javascript"
+                },
+                {   
+                    id: 1, 
+                    name: "Html",
+                    value: "html"
+                },
+                {   
+                    id: 2, 
+                    name: "CSS",
+                    value: "css"
+                },
+                {   
+                    id: 3, 
+                    name: "PHP",
+                    value: "php"
+                },
+                {   
+                    id: 4, 
+                    name: "C",
+                    value: "c_cpp"
+                },
+                {   
+                    id: 5, 
+                    name: "Ruby",
+                    value: "ruby"
                 },
             ],
         }
     },
     methods: {
         onChange() {
-            // console.log(this.selected)
+            console.log(this.selected);
             const theme = this.themes.find((item) => item.id === this.selected )
-            // console.log(theme)
+            console.log(theme)
             this.$emit('get-theme', theme)
+        },
+        onLangChange() {
+            console.log(this.lang_seleted);
+            // const Arr = this.langs;
+            console.log(this.langs);
+            console.log(this.themes);
+
+
+            let lang = this.langs.find((lang) => lang.id == this.lang_seleted )
+            console.log(lang)
+            this.$emit('get-lang', lang)
         }
     }
 }

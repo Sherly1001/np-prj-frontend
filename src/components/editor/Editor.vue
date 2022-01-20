@@ -6,11 +6,12 @@
                     <v-ace-editor
                         v-model:value="content"
                         :theme="theme"
-                        lang="javascript"
-                        mode="javascript"
+                        :lang="lang"
+                        :mode="lang"
                         style="height: 650px; font-size:15px"
-                        enableLiveAutocompletion="true"
-                        enableBasicAutocompletion="true"/>
+                        :enableLiveAutocompletion="true"
+                        :enableBasicAutocompletion="true"
+                        :autoComplete="true"/>
                 </div>
             </div>
             <div class="editor__footer">
@@ -28,7 +29,7 @@
         </div>
     </div>
 
-    <Settings @get-theme="getThemeData"/>
+    <Settings @get-theme="getThemeData" @get-lang="getLangData"/>
 </template>
 
 <script>
@@ -45,6 +46,14 @@ import 'ace-builds/src-noconflict/theme-solarized_dark';
 import 'ace-builds/src-noconflict/theme-cobalt';
 
 import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-css';
+import 'ace-builds/src-noconflict/mode-php';
+import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/mode-ruby';
+
+
+
 
 
 import Settings from '../Settings.vue'
@@ -62,7 +71,8 @@ export default {
                 message: "Code run here",
                 class: "log log--string"
             },
-            theme: "dracular"
+            theme: "dracula",
+            lang: "javascript"
         }
     },
     computed: {
@@ -91,6 +101,9 @@ export default {
         },
         getThemeData(theme) {
             this.theme = theme.value
+        },
+        getLangData(lang) {
+            this.lang = lang.value;
         }
     },
 }
