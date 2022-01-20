@@ -5,10 +5,12 @@
                 <div id="editorCode" class="editor__code">
                     <v-ace-editor
                         v-model:value="content"
-                        v-model:theme="theme"
+                        :theme="theme"
                         lang="javascript"
                         mode="javascript"
-                        style="height: 650px" />
+                        style="height: 650px; font-size:15px"
+                        enableLiveAutocompletion="true"
+                        enableBasicAutocompletion="true"/>
                 </div>
             </div>
             <div class="editor__footer">
@@ -32,18 +34,27 @@
 <script>
 import { VAceEditor } from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/theme-dracula';
+import 'ace-builds/src-noconflict/theme-twilight';
 import 'ace-builds/src-noconflict/theme-chrome';
+import 'ace-builds/src-noconflict/theme-idle_fingers';
+import 'ace-builds/src-noconflict/theme-kuroir';
+import 'ace-builds/src-noconflict/theme-crimson_editor';
+import 'ace-builds/src-noconflict/theme-nord_dark';
+import 'ace-builds/src-noconflict/theme-tomorrow_night_blue';
+import 'ace-builds/src-noconflict/theme-solarized_dark';
+import 'ace-builds/src-noconflict/theme-cobalt';
+
 import 'ace-builds/src-noconflict/mode-javascript';
+
+
 import Settings from '../Settings.vue'
 
 export default {
     name: 'Editor',
-
     components: {
         VAceEditor,
         Settings,
     },
-
     data() {
         return {
             content: '',
@@ -51,19 +62,21 @@ export default {
                 message: "Code run here",
                 class: "log log--string"
             },
-            theme: "dracula"
+            theme: "dracular"
         }
     },
-
     computed: {
         consoleLogList() {
             return document.querySelector('.editor__console-logs')
         }
     },
-
     methods: {
         onReset() {
             this.content = '';
+
+            while (this.consoleLogList.firstChild) {
+            this.consoleLogList.removeChild(this.consoleLogList.firstChild);
+        } 
         },
         onRun() {
             const newLogItem = document.createElement('li');

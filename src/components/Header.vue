@@ -6,6 +6,7 @@
             </div>
             <div class="header--right">
                 <div class="btn-share">Share+</div>
+                <button type="button" class="btn btn-primary btn-share">Share+</button>
                 <div class="avatar"></div>
             </div>
         </div>
@@ -44,14 +45,9 @@
 }
 
 .btn-share {
-    border: 0;
-    padding: 0.3em;
-    background-color: #2f7ae5;
-    border-radius: 5px;
     width: 100px;
     cursor: pointer;
     font-size: 20px;
     font-weight: 600;
-    color: white;
 }
 </style>
