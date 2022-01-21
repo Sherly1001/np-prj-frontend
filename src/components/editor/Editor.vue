@@ -1,35 +1,37 @@
 <template>
-    <div class="editor">
-        <div class="editor__wrapper">
-            <div class="editor__body">
-                <div id="editorCode" class="editor__code">
-                    <v-ace-editor
-                        v-model:value="content"
-                        :theme="theme"
-                        :lang="lang"
-                        :mode="lang"
-                        style="height: 650px; font-size:15px"
-                        :enableLiveAutocompletion="true"
-                        :enableBasicAutocompletion="true"
-                        :autoComplete="true"/>
-                </div>
-            </div>
-            <div class="editor__footer">
-                <div class="editor__footer--left">
-                    <button @click="onRun()" class="editor__btn editor__run">Run</button>
-                    <button @click="onReset()" class="editor__btn editor__reset">Reset</button>
-                </div>
-                <div class="editor__footer--right">
-                    <div class="editor__console">
-                        <ul class="editor__console-logs">
-                        </ul>
-                    </div>
-                </div>
-            </div>
+  <div class="editor">
+    <div class="editor__wrapper">
+      <div class="editor__body">
+        <div id="editorCode" class="editor__code">
+          <v-ace-editor
+            v-model:value="content"
+            :theme="theme"
+            :lang="lang"
+            :mode="lang"
+            style="height: 650px; font-size: 15px"
+            :enableLiveAutocompletion="true"
+            :enableBasicAutocompletion="true"
+            :autoComplete="true"
+          />
         </div>
+      </div>
+      <div class="editor__footer">
+        <div class="editor__footer--left">
+          <button @click="onRun()" class="editor__btn editor__run">Run</button>
+          <button @click="onReset()" class="editor__btn editor__reset">
+            Reset
+          </button>
+        </div>
+        <div class="editor__footer--right">
+          <div class="editor__console">
+            <ul class="editor__console-logs"></ul>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <Settings @get-theme="getThemeData" @get-lang="getLangData"/>
+  <Settings @get-theme="getThemeData" @get-lang="getLangData" />
 </template>
 
 <script>
@@ -52,303 +54,300 @@ import 'ace-builds/src-noconflict/mode-php';
 import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/mode-ruby';
 
-
-
-
-
-import Settings from '../Settings.vue'
+import Settings from '../Settings.vue';
 
 export default {
-    name: 'Editor',
-    components: {
-        VAceEditor,
-        Settings,
+  name: 'Editor',
+  components: {
+    VAceEditor,
+    Settings,
+  },
+  data() {
+    return {
+      content: '',
+      consoleMessages: {
+        message: 'Code run here',
+        class: 'log log--string',
+      },
+      theme: 'dracula',
+      lang: 'javascript',
+    };
+  },
+  computed: {
+    consoleLogList() {
+      return document.querySelector('.editor__console-logs');
     },
-    data() {
-        return {
-            content: '',
-            consoleMessages : {
-                message: "Code run here",
-                class: "log log--string"
-            },
-            theme: "dracula",
-            lang: "javascript"
-        }
+  },
+  methods: {
+    onReset() {
+      this.content = '';
+
+      while (this.consoleLogList.firstChild) {
+        this.consoleLogList.removeChild(this.consoleLogList.firstChild);
+      }
     },
-    computed: {
-        consoleLogList() {
-            return document.querySelector('.editor__console-logs')
-        }
+    onRun() {
+      const newLogItem = document.createElement('li');
+      const newLogText = document.createElement('pre');
+
+      newLogText.className = 'log log--string';
+      newLogText.textContent = 'Code run here';
+
+      newLogItem.appendChild(newLogText);
+
+      this.consoleLogList.appendChild(newLogItem);
     },
-    methods: {
-        onReset() {
-            this.content = '';
-
-            while (this.consoleLogList.firstChild) {
-            this.consoleLogList.removeChild(this.consoleLogList.firstChild);
-        } 
-        },
-        onRun() {
-            const newLogItem = document.createElement('li');
-            const newLogText = document.createElement('pre');
-
-            newLogText.className = "log log--string";
-            newLogText.textContent = "Code run here";
-
-            newLogItem.appendChild(newLogText);
-
-            this.consoleLogList.appendChild(newLogItem);
-        },
-        getThemeData(theme) {
-            this.theme = theme.value
-        },
-        getLangData(lang) {
-            this.lang = lang.value;
-        }
+    getThemeData(theme) {
+      this.theme = theme.value;
     },
-}
+    getLangData(lang) {
+      this.lang = lang.value;
+    },
+  },
+};
 </script>
 
 <style scoped>
 .editor {
-    height: 100%;
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  height: 100%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .editor__wrapper {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: var(--editor-bg);
-    padding: 2em;
-    border-radius: 3px;
-    border: 1px solid #ccc;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--editor-bg);
+  padding: 2em;
+  border-radius: 3px;
+  border: 1px solid #ccc;
 }
 
 .editor__body {
-    flex: 1;
+  flex: 1;
 }
 
 .editor__footer {
-    display: flex;
+  display: flex;
 }
 
 .editor__footer--left {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .editor__footer--right {
-    flex: 1;
-    margin-left: 10px;
-    overflow: hidden;
+  flex: 1;
+  margin-left: 10px;
+  overflow: hidden;
 }
 
 .editor__btn {
-    border: 0;
-    padding: .5em;
-    background-color: #fff;
-    border: 2px solid #333;
-    border-radius: 5px;
-    margin-top: 1em;
-    width: 100px;
-    cursor: pointer;
-    font-size: 18px;
+  border: 0;
+  padding: 0.5em;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 5px;
+  margin-top: 1em;
+  width: 100px;
+  cursor: pointer;
+  font-size: 18px;
 }
 
 .editor__console {
-    background-color: #fff;
-    width: 100%;
-    height: 130px;
-    margin-top: .9em;
-    border: 1px solid var(--editor-border);
-    overflow: auto;
+  background-color: #fff;
+  width: 100%;
+  height: 130px;
+  margin-top: 0.9em;
+  border: 1px solid var(--editor-border);
+  overflow: auto;
 }
 
 .editor__code {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border: 1px solid var(--editor-border);
+  position: relative;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid var(--editor-border);
 }
 
 /* Editor Console Logs */
 .editor__console-logs {
-    padding: 10px;
-    list-style: none;
+  padding: 10px;
+  list-style: none;
 }
 
 .editor__console-logs li pre {
-    font-size: .9em;
-    font-family: Inconsolata, sans-serif;
+  font-size: 0.9em;
+  font-family: Inconsolata, sans-serif;
 }
 
 .ace_gutter {
-    border-left: 5px solid var(--editor-border);
+  border-left: 5px solid var(--editor-border);
 }
 
 .log--default {
-    color: #000;
+  color: #000;
 }
 
 .log--string {
-    color: #48BF0A;
+  color: #48bf0a;
 }
 
 .log--number {
-    color: #48BF0A;
+  color: #48bf0a;
 }
 
 .log--boolean {
-    color: blue;
+  color: blue;
 }
 
 .log--undefined {
-    color: grey;
+  color: grey;
 }
 
 .log--error {
-    color: red;
+  color: red;
 }
 
 .log--object {
-    color: darkcyan;
+  color: darkcyan;
 }
 
 .log--array {
-    color: darkblue;
+  color: darkblue;
 }
 
 .log--function {
-    color: yellow;
-}.editor {
-    height: 100%;
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  color: yellow;
+}
+.editor {
+  height: 100%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .editor__wrapper {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: var(--editor-bg);
-    padding: 2em;
-    border-radius: 3px;
-    border: 1px solid #ccc;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--editor-bg);
+  padding: 2em;
+  border-radius: 3px;
+  border: 1px solid #ccc;
 }
 
 .editor__body {
-    flex: 1;
+  flex: 1;
 }
 
 .editor__footer {
-    display: flex;
+  display: flex;
 }
 
 .editor__footer--left {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .editor__footer--right {
-    flex: 1;
-    margin-left: 10px;
-    overflow: hidden;
+  flex: 1;
+  margin-left: 10px;
+  overflow: hidden;
 }
 
 .editor__btn {
-    border: 0;
-    padding: .5em;
-    background-color: #fff;
-    border: 2px solid #333;
-    border-radius: 5px;
-    margin-top: 1em;
-    width: 100px;
-    cursor: pointer;
-    font-size: 18px;
+  border: 0;
+  padding: 0.5em;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 5px;
+  margin-top: 1em;
+  width: 100px;
+  cursor: pointer;
+  font-size: 18px;
 }
 
 .editor__console {
-    background-color: #fff;
-    width: 100%;
-    height: 130px;
-    margin-top: .9em;
-    border: 1px solid var(--editor-border);
-    overflow: auto;
+  background-color: #fff;
+  width: 100%;
+  height: 130px;
+  margin-top: 0.9em;
+  border: 1px solid var(--editor-border);
+  overflow: auto;
 }
 
 .editor__code {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border: 1px solid var(--editor-border);
+  position: relative;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid var(--editor-border);
 }
 
 /* Editor Console Logs */
 .editor__console-logs {
-    padding: 10px;
-    list-style: none;
+  padding: 10px;
+  list-style: none;
 }
 
 .editor__console-logs li pre {
-    font-size: .9em;
-    font-family: Inconsolata, sans-serif;
+  font-size: 0.9em;
+  font-family: Inconsolata, sans-serif;
 }
 
 .ace_gutter {
-    border-left: 5px solid var(--editor-border);
+  border-left: 5px solid var(--editor-border);
 }
 
 .log--default {
-    color: #000;
+  color: #000;
 }
 
 .log--string {
-    color: #48BF0A;
+  color: #48bf0a;
 }
 
 .log--number {
-    color: #48BF0A;
+  color: #48bf0a;
 }
 
 .log--boolean {
-    color: blue;
+  color: blue;
 }
 
 .log--undefined {
-    color: grey;
+  color: grey;
 }
 
 .log--error {
-    color: red;
+  color: red;
 }
 
 .log--object {
-    color: darkcyan;
+  color: darkcyan;
 }
 
 .log--array {
-    color: darkblue;
+  color: darkblue;
 }
 
 .log--function {
-    color: yellow;
+  color: yellow;
 }
 </style>
