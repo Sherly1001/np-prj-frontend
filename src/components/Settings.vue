@@ -130,19 +130,11 @@ export default {
   },
   methods: {
     onChange() {
-      console.log(this.selected);
-      const theme = this.themes.find((item) => item.id === this.selected);
-      console.log(theme);
+      let theme = this.themes.find((item) => item.id === this.selected);
       this.$emit('get-theme', theme);
     },
     onLangChange() {
-      console.log(this.lang_seleted);
-      // const Arr = this.langs;
-      console.log(this.langs);
-      console.log(this.themes);
-
       let lang = this.langs.find((lang) => lang.id == this.lang_seleted);
-      console.log(lang);
       this.$emit('get-lang', lang);
     },
   },

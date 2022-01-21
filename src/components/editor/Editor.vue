@@ -2,23 +2,16 @@
   <div class="editor">
     <div class="editor__wrapper">
       <div class="editor__body">
-        <div id="editorCode" class="editor__code">
-          <v-ace-editor
-            v-model:value="content"
-            :theme="theme"
-            :lang="lang"
-            :mode="lang"
-            style="height: 650px; font-size: 15px"
-            :enableLiveAutocompletion="true"
-            :enableBasicAutocompletion="true"
-            :autoComplete="true"
-          />
-        </div>
+        <div
+          id="editorCode"
+          class="editor__code"
+          style="height: 650px; font-size: 15px"
+        ></div>
       </div>
       <div class="editor__footer">
         <div class="editor__footer--left">
-          <button @click="onRun()" class="editor__btn editor__run">Run</button>
-          <button @click="onReset()" class="editor__btn editor__reset">
+          <button @click="onRun" class="editor__btn editor__run">Run</button>
+          <button @click="onReset" class="editor__btn editor__reset">
             Reset
           </button>
         </div>
@@ -35,31 +28,15 @@
 </template>
 
 <script>
-import { VAceEditor } from 'vue3-ace-editor';
-import 'ace-builds/src-noconflict/theme-dracula';
-import 'ace-builds/src-noconflict/theme-twilight';
-import 'ace-builds/src-noconflict/theme-chrome';
-import 'ace-builds/src-noconflict/theme-idle_fingers';
-import 'ace-builds/src-noconflict/theme-kuroir';
-import 'ace-builds/src-noconflict/theme-crimson_editor';
-import 'ace-builds/src-noconflict/theme-nord_dark';
-import 'ace-builds/src-noconflict/theme-tomorrow_night_blue';
-import 'ace-builds/src-noconflict/theme-solarized_dark';
-import 'ace-builds/src-noconflict/theme-cobalt';
-
-import 'ace-builds/src-noconflict/mode-javascript';
-import 'ace-builds/src-noconflict/mode-html';
-import 'ace-builds/src-noconflict/mode-css';
-import 'ace-builds/src-noconflict/mode-php';
-import 'ace-builds/src-noconflict/mode-c_cpp';
-import 'ace-builds/src-noconflict/mode-ruby';
+import { markRaw } from 'vue';
+import ace from 'ace-builds';
+import 'ace-builds/webpack-resolver';
 
 import Settings from '../Settings.vue';
 
 export default {
   name: 'Editor',
   components: {
-    VAceEditor,
     Settings,
   },
   data() {
@@ -71,17 +48,41 @@ export default {
       },
       theme: 'dracula',
       lang: 'javascript',
+      editor: null,
     };
+  },
+  mounted() {
+    this.editor = markRaw(
+      ace.edit('editorCode', {
+        value: this.content,
+        mode: 'ace/mode/' + this.lang,
+        theme: 'ace/theme/' + this.theme,
+        dragEnabled: true,
+        enableAutoIndent: true,
+        autoScrollEditorIntoView: true,
+      })
+    );
+
+    this.editor.on('change', () => {
+      // console.log(e);
+      this.content = this.editor.getValue();
+    });
   },
   computed: {
     consoleLogList() {
       return document.querySelector('.editor__console-logs');
     },
   },
+  watch: {
+    theme(newTheme) {
+      this.editor.setTheme('ace/theme/' + newTheme);
+    },
+    lang(newLang) {
+      this.editor.setOption('mode', 'ace/mode/' + newLang);
+    },
+  },
   methods: {
     onReset() {
-      this.content = '';
-
       while (this.consoleLogList.firstChild) {
         this.consoleLogList.removeChild(this.consoleLogList.firstChild);
       }
