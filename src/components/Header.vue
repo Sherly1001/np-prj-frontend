@@ -6,6 +6,9 @@
         <button type="button" class="btn btn-primary">Share +</button>
         <div class="avatar"></div>
       </div>
+
+      <router-link to="/register">Register</router-link> |
+    <router-link to="/login">Login</router-link>
     </div>
   </section>
 </template>

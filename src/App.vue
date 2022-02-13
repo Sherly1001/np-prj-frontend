@@ -1,20 +1,22 @@
 <template>
   <Header />
-  <section class="main--content">
+  
+    <router-view></router-view>
+  <!-- <section class="main--content">
     <div class="main__wrapper">
       <Editor />
     </div>
-  </section>
+  </section> -->
 </template>
 
 <script>
-import Editor from './components/editor/Editor.vue';
+// import Editor from './components/editor/Editor.vue';
 import Header from './components/Header.vue';
 
 export default {
   name: 'App',
   components: {
-    Editor,
+    // Editor,
     Header,
   },
 };
