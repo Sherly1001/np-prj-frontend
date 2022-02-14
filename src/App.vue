@@ -15,10 +15,24 @@ import Header from './components/Header.vue';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      loggedInUser: null
+    }
+  },
   components: {
     // Editor,
     Header,
   },
+  created() {
+    let url = `wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem('token')}`
+    console.log(url)
+    let ws = new WebSocket(url)
+      ws.onmessage = m => {
+        let serverRes = JSON.parse(m.data);
+        console.log(serverRes);
+      };
+  }
 };
 </script>
 

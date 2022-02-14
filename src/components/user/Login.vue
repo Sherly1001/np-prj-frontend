@@ -32,8 +32,6 @@ export default {
         return {
             username: '',
             password: '',
-
-            token: ''
         }
     },
     methods: {
