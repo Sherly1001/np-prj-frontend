@@ -1,8 +1,11 @@
 <template>
     <div class="container">
         <div class="form-login form-wrap">
-            <form @submit.prevent="handleSubmit">
+            <form @submit="handleSubmit">
                 <h3>Login</h3>
+                <div v-show="error" class="alert alert-danger" role="alert">
+                    {{ errorMsg }}
+                </div>
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" class="form-control" v-model="username" placeholder="Username">
@@ -32,23 +35,33 @@ export default {
         return {
             username: '',
             password: '',
+            error: false,
+            errorMsg: 'Username or password is wrong! Please try again!'
         }
     },
     methods: {
-        async handleSubmit() {
-            const response = await axios.post('https://np-prj-services.herokuapp.com/users/login', {
-                username: this.username,
-                passwd: this.password
-            });
-            console.log(response);
-            localStorage.setItem('token', response.data.data)
-            // console.log(localStorage);
+        async handleSubmit(e) {
+            try {
+                e.preventDefault();
+                const response = await axios.post('https://np-prj-services.herokuapp.com/users/login', {
+                    username: this.username,
+                    passwd: this.password,
+                })
+                // console.log(response);
+                localStorage.setItem('token', response.data.data)
+                // console.log(localStorage);
 
-            this.cookies.set("token", response.data.data);
-            // let my_cookie_value = this.cookies.get("myCoookie");
-            // console.log('LOGIN:', my_cookie_value);
-        },
-    },
+                this.cookies.set("token", response.data.data);
+                // let my_cookie_value = this.cookies.get("myCoookie");
+                // console.log('LOGIN:', my_cookie_value);
+                this.$router.push('home')
+                
+            } catch(e) {
+                this.error = true
+            } 
+
+        }
+    }
 
 }
 </script>
