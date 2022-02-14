@@ -28,32 +28,6 @@
             <Settings @get-theme="getThemeData" @get-lang="getLangData" />
         </div>
     </section>
-    <!-- <div class="editor">
-        <div class="editor__wrapper">
-            <div class="editor__body">
-                <div
-                id="editorCode"
-                class="editor__code"
-                style="height: 650px; font-size: 15px"
-                ></div>
-            </div>
-            <div class="editor__footer">
-                <div class="editor__footer--left">
-                <button @click="onRun" class="btn btn-default editor__btn editor__run">Run</button>
-                <button @click="onReset" class="editor__btn editor__reset">
-                    Reset
-                </button>
-                </div>
-                <div class="editor__footer--right">
-                <div class="editor__console">
-                    <ul class="editor__console-logs"></ul>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- <Settings @get-theme="getThemeData" @get-lang="getLangData" /> -->
 </template>
 
 <script>
@@ -62,8 +36,9 @@ import ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import { useCookies } from "vue3-cookies";
 
-
 import Settings from '../Settings.vue';
+
+import { CursorMaker } from './cursors';
 
 export default {
     name: 'Editor',
@@ -84,6 +59,8 @@ export default {
         theme: 'dracula',
         lang: 'javascript',
         editor: null,
+        cursors: {},
+        cursors_marker: {},
         };
     },
     mounted() {
@@ -95,60 +72,78 @@ export default {
                 dragEnabled: true,
                 enableAutoIndent: true,
                 autoScrollEditorIntoView: true,
-                corsor: 'red'
             })
         );
 
         this.editor.on('change', () => {
-            // console.log(e);
             this.content = this.editor.getValue();
         });
-        
-        let my_cookie_value = this.cookies.get("myCoookie");
-        console.log('editor: ', my_cookie_value);
-        let url = `wss://np-prj-services.herokuapp.com/ws?token=${my_cookie_value}`
-        console.log(url)
-        let ws = new WebSocket(url)
-            ws.onmessage = m => console.log(JSON.parse(m.data));
 
-        console.log('editor1: ', my_cookie_value);
-        
+        this.editor.on('changeSelection', () => {
+            this.cursors_marker.redraw();
+        });
+
+        setTimeout(() => {
+            this.cursors_marker = new CursorMaker(this.editor.session, this.cursors);
+            this.editor.session.addDynamicMarker(this.cursors_marker, true);
+
+            /*
+            this.cursors_marker.addCursor('sher', {
+                row: 3,
+                column: 3,
+                color: 'red',
+            });
+            this.cursors_marker.addCursor('noob', {
+                row: 4,
+                column: 4,
+                color: 'blue',
+            });
+            */
+            });
         },
     computed: {
         consoleLogList() {
-        return document.querySelector('.editor__console-logs');
+            return document.querySelector('.editor__console-logs');
         },
     },
     watch: {
         theme(newTheme) {
-        this.editor.setTheme('ace/theme/' + newTheme);
+            this.editor.setTheme('ace/theme/' + newTheme);
         },
         lang(newLang) {
-        this.editor.setOption('mode', 'ace/mode/' + newLang);
+            this.editor.setOption('mode', 'ace/mode/' + newLang);
+        },
+        cursors: {
+            handler() {
+                if (this.cursors_marker.redraw) {
+                    this.cursors_marker.redraw();
+                }
+            },
+            deep: true,
         },
     },
     methods: {
         onReset() {
-        while (this.consoleLogList.firstChild) {
-            this.consoleLogList.removeChild(this.consoleLogList.firstChild);
-        }
+            while (this.consoleLogList.firstChild) {
+                this.consoleLogList.removeChild(this.consoleLogList.firstChild);
+            }
         },
         onRun() {
-        const newLogItem = document.createElement('li');
-        const newLogText = document.createElement('pre');
+            const newLogItem = document.createElement('li');
+            const newLogText = document.createElement('pre');
 
-        newLogText.className = 'log log--string';
-        newLogText.textContent = 'Code run here';
+            newLogText.className = 'log log--string';
+            newLogText.textContent = 'Code run here';
 
-        newLogItem.appendChild(newLogText);
+            newLogItem.appendChild(newLogText);
 
-        this.consoleLogList.appendChild(newLogItem);
+            this.consoleLogList.appendChild(newLogItem);
         },
         getThemeData(theme) {
-        this.theme = theme.value;
+            this.theme = theme.value;
         },
         getLangData(lang) {
-        this.lang = lang.value;
+            this.lang = lang.value;
         },
     },
 };
