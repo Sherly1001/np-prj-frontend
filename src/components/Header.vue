@@ -1,14 +1,21 @@
 <template>
   <section class="header">
     <div class="header__wrapper">
-      <div class="header--left">Collaborative coding</div>
-      <div class="header--right">
-        <button type="button" class="btn btn-primary">Share +</button>
-        <div class="avatar"></div>
-      </div>
+      <div class="header--left"><router-link to="/home">Collaborative coding</router-link></div>
+          <!-- <router-link to="/login"><div class="header--left">Collaborative coding</div></router-link> -->
 
-      <router-link to="/register">Register</router-link> |
-    <router-link to="/login">Login</router-link>
+      <!-- <div class="header--left">Collaborative coding</div> -->
+
+      <div class="header--right">
+        <!-- <button type="button" class="btn btn-primary">Share +</button>
+        <div class="avatar"></div> -->
+        <div class="header--right_item">
+          <router-link to="/register">Register</router-link>
+        </div>
+        <div class="header--right_item">
+          <router-link to="/login">Login</router-link>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -42,5 +49,15 @@
   display: flex;
   text-align: center;
   align-items: center;
+}
+
+a{
+  color: #fff;
+  text-decoration: none;
+  margin-left: 15px;
+}
+
+a:hover {
+  color: rgb(214, 197, 197);
 }
 </style>

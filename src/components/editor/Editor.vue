@@ -1,5 +1,34 @@
 <template>
-    <div class="editor">
+    <section class="main--content">
+        <div class="main__wrapper">
+            <div class="editor">
+                <div class="editor__wrapper">
+                    <div class="editor__body">
+                        <div
+                        id="editorCode"
+                        class="editor__code"
+                        style="height: 650px; font-size: 15px"
+                        ></div>
+                    </div>
+                    <div class="editor__footer">
+                        <div class="editor__footer--left">
+                        <button @click="onRun" class="btn btn-default editor__btn editor__run">Run</button>
+                        <button @click="onReset" class="editor__btn editor__reset">
+                            Reset
+                        </button>
+                        </div>
+                        <div class="editor__footer--right">
+                        <div class="editor__console">
+                            <ul class="editor__console-logs"></ul>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Settings @get-theme="getThemeData" @get-lang="getLangData" />
+        </div>
+    </section>
+    <!-- <div class="editor">
         <div class="editor__wrapper">
             <div class="editor__body">
                 <div
@@ -22,20 +51,26 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <Settings @get-theme="getThemeData" @get-lang="getLangData" />
+    <!-- <Settings @get-theme="getThemeData" @get-lang="getLangData" /> -->
 </template>
 
 <script>
 import { markRaw } from 'vue';
 import ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
+import { useCookies } from "vue3-cookies";
+
 
 import Settings from '../Settings.vue';
 
 export default {
     name: 'Editor',
+    setup() {
+        const { cookies } = useCookies();
+        return { cookies };
+    },
     components: {
         Settings,
     },
@@ -68,7 +103,17 @@ export default {
             // console.log(e);
             this.content = this.editor.getValue();
         });
-    },
+        
+        let my_cookie_value = this.cookies.get("myCoookie");
+        console.log('editor: ', my_cookie_value);
+        let url = `wss://np-prj-services.herokuapp.com/ws?token=${my_cookie_value}`
+        console.log(url)
+        let ws = new WebSocket(url)
+            ws.onmessage = m => console.log(JSON.parse(m.data));
+
+        console.log('editor1: ', my_cookie_value);
+        
+        },
     computed: {
         consoleLogList() {
         return document.querySelector('.editor__console-logs');

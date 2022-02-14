@@ -1,25 +1,39 @@
 <template>
-    <form @submit.prevent="handleSubmit">
-        <h3>Login</h3>
-        <div class="form-group">
-            <label for="">Username</label>
-            <input type="text" class="form-control" v-model="username" placeholder="Username">
+    <div class="container">
+        <div class="form-login form-wrap">
+            <form @submit.prevent="handleSubmit">
+                <h3>Login</h3>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" v-model="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="">Password</label>
+                    <input type="password" class="form-control" v-model="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block">Login</button>
+                    <router-link to="/register">Create new account?</router-link>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="">Password</label>
-            <input type="password" class="form-control" v-model="password" placeholder="Password">
-        </div>
-        <button class="btn btn-primary btn-block">Login</button>
-    </form>
+    </div>
 </template>
 <script>
 import axios from 'axios'
+import { useCookies } from "vue3-cookies";
 export default {
     name: 'Login',
+    setup() {
+        const { cookies } = useCookies();
+        return { cookies };
+    },
     data() {
         return {
             username: '',
-            password: ''
+            password: '',
+
+            token: ''
         }
     },
     methods: {
@@ -28,9 +42,21 @@ export default {
                 username: this.username,
                 passwd: this.password
             });
-            console.log(response.data.data);
-            // console.log('sha');
-        }
-    }
+            console.log(response);
+            localStorage.setItem('token', response.data.data)
+            // console.log(localStorage);
+
+            this.cookies.set("token", response.data.data);
+            // let my_cookie_value = this.cookies.get("myCoookie");
+            // console.log('LOGIN:', my_cookie_value);
+        },
+    },
+
 }
 </script>
+
+<style scoped>
+    .btn {
+        margin-right: 10px;
+    }
+</style>

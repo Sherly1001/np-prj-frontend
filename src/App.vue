@@ -41,8 +41,8 @@ html,
 body {
   height: 100%;
   width: 100%;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
-    monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace';
+
 }
 
 .main--content {
@@ -56,5 +56,25 @@ body {
   height: 100%;
   width: 90%;
   display: flex;
+}
+
+.form-wrap h3 {
+  text-align: center;
+}
+
+.form-wrap {
+  width: 40%;
+  padding: 2rem;
+  border: 1px solid #444859;
+  border-radius: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+.form-group {
+  margin-bottom: 1rem;
 }
 </style>

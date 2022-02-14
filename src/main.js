@@ -14,7 +14,7 @@ import Register from './components/user/Register.vue'
 
 
 
-const routeInfos = [
+const routers = [
     {
         path: '/register',
         component: Register
@@ -31,11 +31,12 @@ const routeInfos = [
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes: routeInfos
+    routes: routers
 })
 
 export default router;
 // createApp(App).mount('#app');
+
 
 const app = createApp(App)
 app.use(router)
