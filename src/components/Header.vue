@@ -5,8 +5,10 @@
         <router-link to="/home">Collaborative coding</router-link>
       </div>
       <div v-if="user" class="header--right">
-        <!-- <button type="button" class="btn btn-primary">Share +</button>
-        <div class="avatar"></div> -->
+        <button type="button" class="btn btn-primary">Share
+          <fa icon="plus" />
+        </button>
+        <!-- <div class="avatar"></div> -->
         <div
           class="header--right_item"
           id="dropdownMenuButton1"
@@ -46,6 +48,7 @@
 </template>
 <script>
 import { useCookies } from 'vue3-cookies';
+import { mapGetters } from 'vuex';
 export default {
   name: 'Header',
   setup() {
@@ -60,9 +63,7 @@ export default {
     },
   },
   computed: {
-    user() {
-      return this.$store.getters.user;
-    },
+    ...mapGetters(['user']),
   },
 };
 </script>

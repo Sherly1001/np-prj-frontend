@@ -3,6 +3,15 @@
         <div class="main__wrapper">
         <div class="editor">
             <div class="editor__wrapper">
+                <div v-show="user_pers.length" class="btn-group mb-2" style="width:30px">
+                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Get User Pers?
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li @click="handleClick(user_per.file_id)" v-for="user_per in user_pers" :key="user_per"><a class="dropdown-item" href="javascript:void(0)">{{user_per.file_id}}</a></li>
+                    </ul>
+                </div>
+            <!-- <div v-for="per in user_pers" :key="per">{{per.file_id}}</div> -->
             <div class="editor__body">
                 <div
                 id="editorCode"
@@ -52,47 +61,63 @@ export default {
     },
     data() {
         return {
-        content: '',
-        consoleMessages: {
-            message: 'Code run here',
-            class: 'log log--string',
-        },
-        theme: 'dracula',
-        lang: 'javascript',
-        editor: null,
-        cursors: {},
-        cursors_marker: {},
+            file_id: null,
+            content: '',
+            consoleMessages: {
+                message: 'Code run here',
+                class: 'log log--string',
+            },
+            theme: 'dracula',
+            lang: 'javascript',
+            editor: null,
+            cursors: {},
+            cursors_marker: {},
         };
     },
+    props: ['user_pers'],
+
     computed: {
-        ...mapGetters(['user']),
+        ...mapGetters(['user', 'socket', 'file_content']),
         consoleLogList() {
-        return document.querySelector('.editor__console-logs');
+            return document.querySelector('.editor__console-logs');
         },
     },
     mounted() {
+    // this.socket.sendObj({type:'create-file', args:['280719123468652544', 3, 0, 'content here dkshkj']})
+        if (this.$route.params.file_id.match(/\d+/)) {
+            this.file_id = this.$route.params.file_id;
+            this.socket.sendObj({
+                type: 'get',
+                args: [this.file_id, false],
+            });
+
+        } else {
+            this.file_id = null;
+            this.$router.push('/home');
+        }
+
         this.editor = markRaw(
-        ace.edit('editorCode', {
-            value: this.content,
-            mode: 'ace/mode/' + this.lang,
-            theme: 'ace/theme/' + this.theme,
-            dragEnabled: true,
-            enableAutoIndent: true,
-            autoScrollEditorIntoView: true,
-        })
+            ace.edit('editorCode', {
+                value: this.content,
+                mode: 'ace/mode/' + this.lang,
+                theme: 'ace/theme/' + this.theme,
+                dragEnabled: true,
+                enableAutoIndent: true,
+                autoScrollEditorIntoView: true,
+            })
         );
 
         this.editor.on('change', () => {
-        this.content = this.editor.getValue();
+            this.content = this.editor.getValue();
         });
 
         this.editor.on('changeSelection', () => {
-        this.cursors_marker.redraw();
+            this.cursors_marker.redraw();
         });
 
         setTimeout(() => {
-        this.cursors_marker = new CursorMaker(this.editor.session, this.cursors);
-        this.editor.session.addDynamicMarker(this.cursors_marker, true);
+            this.cursors_marker = new CursorMaker(this.editor.session, this.cursors);
+            this.editor.session.addDynamicMarker(this.cursors_marker, true);
 
         /*
         this.cursors_marker.addCursor('sher', {
@@ -115,17 +140,40 @@ export default {
         lang(newLang) {
             this.editor.setOption('mode', 'ace/mode/' + newLang);
         },
+        file_content(newVal) {
+            if(newVal) {
+                this.editor.setValue(newVal.contents[0].content);
+                this.editor.moveCursorTo(0, 0);
+            }
+        },
         cursors: {
             handler() {
                 if (this.cursors_marker.redraw) {
-                this.cursors_marker.redraw();
+                    this.cursors_marker.redraw();
                 }
             },
-        deep: true,
+            deep: true,
+        },
+        $route(to) {
+            if (!to.params.file_id) return;
+            if (to.params.file_id.match(/\d+/)) {
+                this.file_id = to.params.file_id;
+                this.socket.sendObj({
+                    type: 'get',
+                    args: [this.file_id, false],
+                });
+            } else {
+                this.file_id = null;
+                this.$router.push('/home');
+            }
         },
     },
 
     methods: {
+        handleClick(file_id) {
+            // console.log(file_id);
+            this.$router.push(`/home/${file_id}`);
+        },
         onReset() {
             while (this.consoleLogList.firstChild) {
                 this.consoleLogList.removeChild(this.consoleLogList.firstChild);
@@ -168,7 +216,9 @@ export default {
     display: flex;
     flex-direction: column;
     background: var(--editor-bg);
-    padding: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: 0.5em;
     border-radius: 3px;
     border: 1px solid #ccc;
 }

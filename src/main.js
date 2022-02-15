@@ -5,10 +5,12 @@ import vueAxios from 'vue-axios';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faSortDown);
+library.add(faSortDown, faPlus);
 
 import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
