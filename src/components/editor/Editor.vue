@@ -44,6 +44,8 @@ import 'ace-builds/webpack-resolver';
 import Settings from '../Settings.vue';
 import { mapGetters } from 'vuex';
 
+import { CursorMaker } from './cursors';
+
 export default {
   name: 'Editor',
   components: {
@@ -59,6 +61,8 @@ export default {
       theme: 'dracula',
       lang: 'javascript',
       editor: null,
+      cursors: {},
+      cursors_marker: {},
     };
   },
   computed: {
@@ -80,8 +84,29 @@ export default {
     );
 
     this.editor.on('change', () => {
-      // console.log(e);
       this.content = this.editor.getValue();
+    });
+
+    this.editor.on('changeSelection', () => {
+      this.cursors_marker.redraw();
+    });
+
+    setTimeout(() => {
+      this.cursors_marker = new CursorMaker(this.editor.session, this.cursors);
+      this.editor.session.addDynamicMarker(this.cursors_marker, true);
+
+      /*
+      this.cursors_marker.addCursor('sher', {
+        row: 3,
+        column: 3,
+        color: 'red',
+      });
+      this.cursors_marker.addCursor('noob', {
+        row: 4,
+        column: 4,
+        color: 'blue',
+      });
+      */
     });
   },
   watch: {
@@ -90,6 +115,14 @@ export default {
     },
     lang(newLang) {
       this.editor.setOption('mode', 'ace/mode/' + newLang);
+    },
+    cursors: {
+      handler() {
+        if (this.cursors_marker.redraw) {
+          this.cursors_marker.redraw();
+        }
+      },
+      deep: true,
     },
   },
   methods: {
