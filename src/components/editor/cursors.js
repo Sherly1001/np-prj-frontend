@@ -1,13 +1,24 @@
 export function newCursorHTML(config, color) {
   let div = document.createElement('div');
 
+  let name_top =
+    config.top > config.height
+      ? config.top - config.height
+      : config.top + config.height;
+
   let style_color = color ? `color: ${color};` : '';
-  div.innerHTML = `
-    <div class="ace_cursor" style="${style_color}
-      display: block;
-      width: ${config.width}px; height: ${config.height}px;
-      transform: translate(${config.left}px, ${config.top}px);
-    "></div>`
+  div.innerHTML = `<div class="ace_multi_cursor"
+    style="pointer-events: auto;"><div class="ace_cursor"
+      style="${style_color}
+        display: block;
+        width: ${config.width}px; height: ${config.height}px;
+        transform: translate(${config.left}px, ${config.top}px);
+      "></div><div class="ace_multi_cursor_username"
+      style="${style_color}
+        transform: translate(${config.left}px, ${name_top}px);
+        opacity: 0;
+      ">${config.name}</div>
+      </div>`
     .trim()
     .replace(/\s+/g, ' ');
 
@@ -31,7 +42,14 @@ export class CursorMaker {
       let top = screenPos.row * height;
       let left = markerLayer.$padding + screenPos.column * width;
 
-      let c = newCursorHTML({ width, height, top, left }, pos.color);
+      let cfg = { width, height, top, left, name };
+      let c = newCursorHTML(cfg, pos.color);
+      c.onmouseenter = () => {
+        c.children[1].style.opacity = 1;
+      };
+      c.onmouseleave = () => {
+        c.children[1].style.opacity = 0;
+      };
 
       if (this._elms[name]) {
         this._elms[name].remove();
