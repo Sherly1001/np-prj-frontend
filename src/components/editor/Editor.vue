@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      file_id: null,
       content: '',
       consoleMessages: {
         message: 'Code run here',
@@ -66,12 +67,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'socket', 'file_content']),
     consoleLogList() {
       return document.querySelector('.editor__console-logs');
     },
   },
   mounted() {
+    if (this.$route.params.file_id.match(/\d+/)) {
+      this.file_id = this.$route.params.file_id;
+      this.socket.sendObj({
+        type: 'get',
+        args: [this.file_id, false],
+      });
+    } else {
+      this.file_id = null;
+      this.$router.push('/home');
+    }
+
     this.editor = markRaw(
       ace.edit('editorCode', {
         value: this.content,
@@ -116,6 +128,10 @@ export default {
     lang(newLang) {
       this.editor.setOption('mode', 'ace/mode/' + newLang);
     },
+    file_content(newVal) {
+      this.editor.setValue(newVal.contents[0].content);
+      this.editor.moveCursorTo(0, 0);
+    },
     cursors: {
       handler() {
         if (this.cursors_marker.redraw) {
@@ -123,6 +139,18 @@ export default {
         }
       },
       deep: true,
+    },
+    $route(to) {
+      if (to.params.file_id.match(/\d+/)) {
+        this.file_id = to.params.file_id;
+        this.socket.sendObj({
+          type: 'get',
+          args: [this.file_id, false],
+        });
+      } else {
+        this.file_id = null;
+        this.$router.push('/home');
+      }
     },
   },
   methods: {

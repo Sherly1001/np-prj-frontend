@@ -5,15 +5,13 @@ const store = createStore({
     return {
       curUser: null,
       socket: null,
+      file_content: null,
     };
   },
   getters: {
-    user: (state) => {
-      return state.curUser;
-    },
-    socket: (state) => {
-      return state.socket;
-    },
+    user: (state) => state.curUser,
+    socket: (state) => state.socket,
+    file_content: (state) => state.file_content,
   },
   mutations: {
     userLogin(state, userLogin) {
@@ -22,6 +20,9 @@ const store = createStore({
     socket(state, sock) {
       state.socket = sock;
     },
+    file_content(state, content) {
+      state.file_content = content;
+    },
   },
   actions: {
     handleUserLogin(context, newUserLogin) {
@@ -29,6 +30,9 @@ const store = createStore({
     },
     setSocket(context, newSock) {
       context.commit('socket', newSock);
+    },
+    setContent(context, newContent) {
+      context.commit('file_content', newContent);
     },
   },
 });

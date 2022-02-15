@@ -21,13 +21,29 @@ export default {
   },
   created() {
     const ws = new WebSocket(`${ws_url}/ws?token=${this.cookies.get('token')}`);
-    ws.sendObj = (data) => ws.send(JSON.stringify(data));
+
+    ws.sendObj = (data) => {
+      try {
+        ws.send(JSON.stringify(data));
+      } catch (err) {
+        setTimeout(() => ws.sendObj(data));
+      }
+    };
+
     ws.onmessage = (m) => {
       let data = JSON.parse(m.data);
       console.log(data);
 
       if (data.accept) {
         this.$store.dispatch('handleUserLogin', data.accept.user);
+      } else if (data.get) {
+        if (data.get.error) {
+          // handler when can't open file
+          alert(data.get.error);
+          this.$router.push('/home');
+        } else {
+          this.$store.dispatch('setContent', data.get);
+        }
       }
     };
 

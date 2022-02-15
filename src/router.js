@@ -10,12 +10,16 @@ const routers = [
     component: Register,
   },
   {
-    path: '/home',
+    path: '/home/:file_id?',
     component: Editor,
   },
   {
     path: '/login',
     component: Login,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/home',
   },
 ];
 
