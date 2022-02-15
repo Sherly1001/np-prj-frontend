@@ -7,14 +7,27 @@
       <div v-if="user" class="header--right">
         <!-- <button type="button" class="btn btn-primary">Share +</button>
         <div class="avatar"></div> -->
-        <div class="header--right_item" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <div
+          class="header--right_item"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
           <a href="javascript:void(0)">
             <span class="username">{{ user.username }}</span>
             <fa icon="sort-down" />
           </a>
         </div>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a style="color:black" href="javascript:void(0)" @click="handleLogout"> Logout </a></li>
+          <li>
+            <a
+              style="color: black"
+              href="javascript:void(0)"
+              @click="handleLogout"
+            >
+              Logout
+            </a>
+          </li>
         </ul>
         <!-- <div class="header--right_item">
           <a href="javascript:void(0)" @click="handleLogout"> Logout </a>
@@ -32,7 +45,7 @@
   </section>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex';
 export default {
   name: 'Header',
   methods: {
@@ -43,8 +56,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['user'])
-  }
+    ...mapGetters(['user']),
+  },
 };
 </script>
 <style scoped>

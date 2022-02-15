@@ -21,14 +21,18 @@ export default {
     Header,
   },
   async created() {
-    const ws = await new WebSocket(`wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem('token')}`)
-    ws.onmessage = m => {
-        let serverRes = JSON.parse(m.data);
-        this.$store.dispatch('handleUserLogin', serverRes.accept.user)
-        // console.log(serverRes);
-        console.log('user login:', serverRes.accept.user)
+    const ws = await new WebSocket(
+      `wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem(
+        'token'
+      )}`
+    );
+    ws.onmessage = (m) => {
+      let serverRes = JSON.parse(m.data);
+      this.$store.dispatch('handleUserLogin', serverRes.accept.user);
+      // console.log(serverRes);
+      console.log('user login:', serverRes.accept.user);
     };
-  }
+  },
 };
 </script>
 
