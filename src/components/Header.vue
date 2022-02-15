@@ -4,19 +4,21 @@
       <div class="header--left">
         <router-link to="/home">Collaborative coding</router-link>
       </div>
-      <!-- <router-link to="/login"><div class="header--left">Collaborative coding</div></router-link> -->
-
-      <!-- <div class="header--left">Collaborative coding</div> -->
-
       <div v-if="user" class="header--right">
         <!-- <button type="button" class="btn btn-primary">Share +</button>
         <div class="avatar"></div> -->
-        <div class="header--right_item text-white">
-          {{ user.username }}
+        <div class="header--right_item" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <a href="javascript:void(0)">
+            <span class="username">{{ user.username }}</span>
+            <fa icon="sort-down" />
+          </a>
         </div>
-        <div class="header--right_item">
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a style="color:black" href="javascript:void(0)" @click="handleLogout"> Logout </a></li>
+        </ul>
+        <!-- <div class="header--right_item">
           <a href="javascript:void(0)" @click="handleLogout"> Logout </a>
-        </div>
+        </div> -->
       </div>
       <div v-else class="header--right">
         <div class="header--right_item">
@@ -84,5 +86,9 @@ a {
 
 a:hover {
   color: rgb(214, 197, 197);
+}
+
+.username {
+  margin-right: 5px;
 }
 </style>

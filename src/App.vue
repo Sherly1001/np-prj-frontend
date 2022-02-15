@@ -1,11 +1,13 @@
 <template>
-  <Header />
-  <router-view></router-view>
-  <!-- <section class="main--content">
-    <div class="main__wrapper">
-      <Editor />
-    </div>
-  </section> -->
+  <div id="app">
+    <Header />
+    <router-view></router-view>
+    <!-- <section class="main--content">
+      <div class="main__wrapper">
+        <Editor />
+      </div>
+    </section> -->
+  </div>
 </template>
 
 <script>
@@ -18,6 +20,15 @@ export default {
     // Editor,
     Header,
   },
+  async created() {
+    const ws = await new WebSocket(`wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem('token')}`)
+    ws.onmessage = m => {
+        let serverRes = JSON.parse(m.data);
+        this.$store.dispatch('handleUserLogin', serverRes.accept.user)
+        // console.log(serverRes);
+        console.log('user login:', serverRes.accept.user)
+    };
+  }
 };
 </script>
 

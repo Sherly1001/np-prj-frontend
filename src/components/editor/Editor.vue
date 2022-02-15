@@ -39,6 +39,7 @@ import { useCookies } from "vue3-cookies";
 
 
 import Settings from '../Settings.vue';
+import {mapGetters} from 'vuex'
 
 export default {
     name: 'Editor',
@@ -61,6 +62,12 @@ export default {
         editor: null,
         };
     },
+    computed: {
+        ...mapGetters(['user']),
+        consoleLogList() {
+            return document.querySelector('.editor__console-logs');
+        },
+    },
     mounted() {
         this.editor = markRaw(
             ace.edit('editorCode', {
@@ -81,11 +88,6 @@ export default {
 
         
         },
-    computed: {
-        consoleLogList() {
-            return document.querySelector('.editor__console-logs');
-        },
-    },
     watch: {
         theme(newTheme) {
         this.editor.setTheme('ace/theme/' + newTheme);
