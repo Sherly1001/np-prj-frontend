@@ -21,6 +21,7 @@ export default {
   },
   created() {
     const ws = new WebSocket(`${ws_url}/ws?token=${this.cookies.get('token')}`);
+
     ws.sendObj = (data) => ws.send(JSON.stringify(data));
     ws.onmessage = (m) => {
       let data = JSON.parse(m.data);
@@ -30,8 +31,8 @@ export default {
         this.$store.dispatch('handleUserLogin', data.accept.user);
       }
     };
-
     this.$store.dispatch('setSocket', ws);
+    
   },
 };
 </script>

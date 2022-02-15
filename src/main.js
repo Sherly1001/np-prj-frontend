@@ -17,8 +17,8 @@ import store from './store';
 import router from './router';
 
 createApp(App)
-  .use(router)
-  .use(store)
-  .use(vueAxios, axios)
-  .component('fa', FontAwesomeIcon)
-  .mount('#app');
+    .use(router)
+    .use(store)
+    .use(vueAxios, axios)
+    .component('fa', FontAwesomeIcon)
+    .mount('#app');

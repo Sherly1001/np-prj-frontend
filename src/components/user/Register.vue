@@ -35,7 +35,10 @@
             required
           />
         </div>
-        <button class="btn btn-primary btn-block">Sign Up</button>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block">Sign Up</button>
+            <router-link to="/login">Already have an account?</router-link>
+            </div>
       </form>
     </div>
   </div>
@@ -49,11 +52,11 @@ export default {
 
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
-      error: false,
-      errorMsg: '',
+        username: '',
+        email: '',
+        password: '',
+        error: false,
+        errorMsg: [],
     };
   },
   methods: {
@@ -78,3 +81,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.btn {
+    margin-right: 10px;
+}
+</style>
