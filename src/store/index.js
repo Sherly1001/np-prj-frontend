@@ -1,26 +1,36 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
 const store = createStore({
-    state() {
-        return {
-            curUser: null,
-        }
+  state() {
+    return {
+      curUser: null,
+      socket: null,
+    };
+  },
+  getters: {
+    user: (state) => {
+      return state.curUser;
     },
-    getters: {
-        user: (state) => {
-            return state.curUser;
-        }
+    socket: (state) => {
+      return state.socket;
     },
-    mutations: {
-        userLogin(state, userLogin) {
-            state.curUser = userLogin;
-        },
+  },
+  mutations: {
+    userLogin(state, userLogin) {
+      state.curUser = userLogin;
     },
-    actions: {
-        handleUserLogin(context, newUserLogin) {
-            context.commit('userLogin', newUserLogin);
-        },
-    }
-})
+    socket(state, sock) {
+      state.socket = sock;
+    },
+  },
+  actions: {
+    handleUserLogin(context, newUserLogin) {
+      context.commit('userLogin', newUserLogin);
+    },
+    setSocket(context, newSock) {
+      context.commit('socket', newSock);
+    },
+  },
+});
 
 export default store;
