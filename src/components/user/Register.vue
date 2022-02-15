@@ -57,7 +57,7 @@ export default {
                 passwd: this.password,
                 password_confirm: this.password_confirm
             });
-            this.$router.push('home')
+            this.$router.push('login')
             // console.log(response);
 
 
