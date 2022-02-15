@@ -36,7 +36,7 @@ export default {
             username: '',
             password: '',
             error: false,
-            errorMsg: 'Username or password is wrong! Please try again!'
+            errorMsg: ''
         }
     },
     methods: {
@@ -47,17 +47,10 @@ export default {
                     username: this.username,
                     passwd: this.password,
                 })
-                // console.log(response);
                 localStorage.setItem('token', response.data.data)
-                // console.log(localStorage);
 
                 this.cookies.set("token", response.data.data);
-                // let my_cookie_value = this.cookies.get("myCoookie");
-                // console.log('LOGIN:', my_cookie_value);
-
-
-                // let url = `wss://np-prj-services.herokuapp.com/ws?token=${response.data.data}`
-                // console.log(url)
+                
                 const ws = await new WebSocket(`wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem('token')}`)
                 ws.onmessage = m => {
                     let serverRes = JSON.parse(m.data);
@@ -65,6 +58,10 @@ export default {
                     // console.log(serverRes);
                     console.log('user login:', serverRes.accept.user)
                 };
+
+                if (!this.username) {
+                    this.errors.push('Name required.');
+                }
 
                 this.$router.push('home')
                 
