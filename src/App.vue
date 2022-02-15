@@ -1,6 +1,5 @@
 <template>
-  <Header />
-  
+  <Header :loggedInUser="loggedInUser"/>
     <router-view></router-view>
   <!-- <section class="main--content">
     <div class="main__wrapper">
@@ -24,13 +23,15 @@ export default {
     // Editor,
     Header,
   },
-  created() {
+  async created() {
     let url = `wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem('token')}`
     console.log(url)
-    let ws = new WebSocket(url)
+    let ws = await new WebSocket(url)
       ws.onmessage = m => {
         let serverRes = JSON.parse(m.data);
         console.log(serverRes);
+        this.loggedInUser = serverRes.accept.user;
+        console.log('user:' , this.loggedInUser)
       };
   }
 };

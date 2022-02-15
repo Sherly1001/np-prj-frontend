@@ -1,14 +1,24 @@
 <template>
   <section class="header">
     <div class="header__wrapper">
-      <div class="header--left"><router-link to="/home">Collaborative coding</router-link></div>
-          <!-- <router-link to="/login"><div class="header--left">Collaborative coding</div></router-link> -->
+      <div class="header--left">
+        <router-link to="/home">Collaborative coding</router-link>
+      </div>
+      <!-- <router-link to="/login"><div class="header--left">Collaborative coding</div></router-link> -->
 
       <!-- <div class="header--left">Collaborative coding</div> -->
 
-      <div class="header--right">
+      <div v-if="loggedInUser" class="header--right">
         <!-- <button type="button" class="btn btn-primary">Share +</button>
         <div class="avatar"></div> -->
+        <div class="header--right_item text-white">
+          {{ loggedInUser.username }}
+        </div>
+        <div class="header--right_item">
+          <a href="javascript:void(0)" @click="handleLogout"> Logout </a>
+        </div>
+      </div>
+      <div v-else class="header--right">
         <div class="header--right_item">
           <router-link to="/register">Register</router-link>
         </div>
@@ -19,7 +29,18 @@
     </div>
   </section>
 </template>
-
+<script>
+export default {
+  name: 'Header',
+  props: ['loggedInUser'],
+  methods: {
+    handleLogout() {
+      localStorage.removeItem('token');
+      this.$router.push('login');
+    },
+  }
+};
+</script>
 <style scoped>
 .header {
   display: flex;
@@ -51,7 +72,7 @@
   align-items: center;
 }
 
-a{
+a {
   color: #fff;
   text-decoration: none;
   margin-left: 15px;
