@@ -12,7 +12,7 @@ import Editor from './components/editor/Editor.vue'
 import Login from './components/user/Login.vue'
 import Register from './components/user/Register.vue'
 
-
+import store from './store'
 
 const routers = [
     {
@@ -40,5 +40,6 @@ export default router;
 
 const app = createApp(App)
 app.use(router)
-app.use(vueAxios, axios)
-app.mount('#app')
+    .use(store)
+    .use(vueAxios, axios)
+    .mount('#app')

@@ -27,6 +27,7 @@
             </div>
             <Settings @get-theme="getThemeData" @get-lang="getLangData" />
         </div>
+        <!-- <div v-else>sdjks</div> -->
     </section>
 </template>
 
@@ -82,7 +83,7 @@ export default {
         },
     computed: {
         consoleLogList() {
-        return document.querySelector('.editor__console-logs');
+            return document.querySelector('.editor__console-logs');
         },
     },
     watch: {

@@ -1,6 +1,6 @@
 <template>
-  <Header :loggedInUser="loggedInUser"/>
-    <router-view></router-view>
+  <Header />
+  <router-view></router-view>
   <!-- <section class="main--content">
     <div class="main__wrapper">
       <Editor />
@@ -14,26 +14,10 @@ import Header from './components/Header.vue';
 
 export default {
   name: 'App',
-  data() {
-    return {
-      loggedInUser: null
-    }
-  },
   components: {
     // Editor,
     Header,
   },
-  async created() {
-    let url = `wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem('token')}`
-    console.log(url)
-    let ws = await new WebSocket(url)
-      ws.onmessage = m => {
-        let serverRes = JSON.parse(m.data);
-        console.log(serverRes);
-        this.loggedInUser = serverRes.accept.user;
-        console.log('user:' , this.loggedInUser)
-      };
-  }
 };
 </script>
 
@@ -56,8 +40,8 @@ html,
 body {
   height: 100%;
   width: 100%;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace';
-
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro',
+    'monospace';
 }
 
 .main--content {

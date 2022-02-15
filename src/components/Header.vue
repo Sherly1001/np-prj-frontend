@@ -8,11 +8,11 @@
 
       <!-- <div class="header--left">Collaborative coding</div> -->
 
-      <div v-if="loggedInUser" class="header--right">
+      <div v-if="user" class="header--right">
         <!-- <button type="button" class="btn btn-primary">Share +</button>
         <div class="avatar"></div> -->
         <div class="header--right_item text-white">
-          {{ loggedInUser.username }}
+          {{ user.username }}
         </div>
         <div class="header--right_item">
           <a href="javascript:void(0)" @click="handleLogout"> Logout </a>
@@ -30,14 +30,18 @@
   </section>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'Header',
-  props: ['loggedInUser'],
   methods: {
     handleLogout() {
       localStorage.removeItem('token');
+      this.$store.dispatch('handleUserLogin', null);
       this.$router.push('login');
     },
+  },
+  computed: {
+    ...mapGetters(['user'])
   }
 };
 </script>
