@@ -40,17 +40,12 @@
 import { markRaw } from 'vue';
 import ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
-import { useCookies } from 'vue3-cookies';
 
 import Settings from '../Settings.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Editor',
-  setup() {
-    const { cookies } = useCookies();
-    return { cookies };
-  },
   components: {
     Settings,
   },
@@ -81,7 +76,6 @@ export default {
         dragEnabled: true,
         enableAutoIndent: true,
         autoScrollEditorIntoView: true,
-        corsor: 'red',
       })
     );
 

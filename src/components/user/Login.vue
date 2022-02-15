@@ -37,8 +37,13 @@
 <script>
 import axios from 'axios';
 import { useCookies } from 'vue3-cookies';
+import { api_url } from '../../utils/const';
+
 export default {
   name: 'Login',
+  props: {
+    ws: WebSocket,
+  },
   setup() {
     const { cookies } = useCookies();
     return { cookies };
@@ -48,45 +53,33 @@ export default {
       username: '',
       password: '',
       error: false,
-      errorMsg: 'Username or password is wrong! Please try again!',
+      errorMsg: '',
     };
+  },
+  mounted() {
+    if (this.$store.state.curUser != null) {
+      this.$router.push('home');
+    }
   },
   methods: {
     async handleSubmit(e) {
       try {
         e.preventDefault();
-        const response = await axios.post(
-          'https://np-prj-services.herokuapp.com/users/login',
-          {
-            username: this.username,
-            passwd: this.password,
-          }
-        );
-        // console.log(response);
-        localStorage.setItem('token', response.data.data);
-        // console.log(localStorage);
-
+        const response = await axios.post(`${api_url}/users/login`, {
+          username: this.username,
+          passwd: this.password,
+        });
         this.cookies.set('token', response.data.data);
-        // let my_cookie_value = this.cookies.get("myCoookie");
-        // console.log('LOGIN:', my_cookie_value);
-
-        // let url = `wss://np-prj-services.herokuapp.com/ws?token=${response.data.data}`
-        // console.log(url)
-        const ws = await new WebSocket(
-          `wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem(
-            'token'
-          )}`
-        );
-        ws.onmessage = (m) => {
-          let serverRes = JSON.parse(m.data);
-          this.$store.dispatch('handleUserLogin', serverRes.accept.user);
-          // console.log(serverRes);
-          console.log('user login:', serverRes.accept.user);
-        };
-
+        this.$store.getters.socket.sendObj({
+          type: 'login',
+          args: [response.data.data],
+        });
         this.$router.push('home');
-      } catch (e) {
+      } catch (err) {
+        console.log(err);
+        const msgs = err.response.data.message.split(':');
         this.error = true;
+        this.errorMsg = msgs[msgs.length - 1];
       }
     },
   },

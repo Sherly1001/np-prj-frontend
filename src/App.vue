@@ -1,45 +1,42 @@
 <template>
   <div id="app">
     <Header />
-    <router-view></router-view>
-    <!-- <section class="main--content">
-      <div class="main__wrapper">
-        <Editor />
-      </div>
-    </section> -->
+    <router-view />
   </div>
 </template>
 
 <script>
-// import Editor from './components/editor/Editor.vue';
+import { useCookies } from 'vue3-cookies';
 import Header from './components/Header.vue';
+import { ws_url } from './utils/const';
 
 export default {
   name: 'App',
   components: {
-    // Editor,
     Header,
   },
-  async created() {
-    const ws = await new WebSocket(
-      `wss://np-prj-services.herokuapp.com/ws?token=${localStorage.getItem(
-        'token'
-      )}`
-    );
+  setup() {
+    const { cookies } = useCookies();
+    return { cookies };
+  },
+  created() {
+    const ws = new WebSocket(`${ws_url}/ws?token=${this.cookies.get('token')}`);
+    ws.sendObj = (data) => ws.send(JSON.stringify(data));
     ws.onmessage = (m) => {
-      let serverRes = JSON.parse(m.data);
-      this.$store.dispatch('handleUserLogin', serverRes.accept.user);
-      // console.log(serverRes);
-      console.log('user login:', serverRes.accept.user);
+      let data = JSON.parse(m.data);
+      console.log(data);
+
+      if (data.accept) {
+        this.$store.dispatch('handleUserLogin', data.accept.user);
+      }
     };
+
+    this.$store.dispatch('setSocket', ws);
   },
 };
 </script>
 
 <style>
-#app {
-}
-
 :root {
   --editor-bg: #eee;
   --editor-border: #3f87a6;

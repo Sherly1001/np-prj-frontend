@@ -45,18 +45,24 @@
   </section>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { useCookies } from 'vue3-cookies';
 export default {
   name: 'Header',
+  setup() {
+    const { cookies } = useCookies();
+    return { cookies };
+  },
   methods: {
     handleLogout() {
-      localStorage.removeItem('token');
+      this.cookies.remove('token');
       this.$store.dispatch('handleUserLogin', null);
       this.$router.push('login');
     },
   },
   computed: {
-    ...mapGetters(['user']),
+    user() {
+      return this.$store.getters.user;
+    },
   },
 };
 </script>

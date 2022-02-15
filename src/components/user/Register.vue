@@ -3,6 +3,9 @@
     <div class="form-register form-wrap">
       <form @submit.prevent="handleSubmit">
         <h3>Sign Up</h3>
+        <div v-show="error" class="alert alert-danger" role="alert">
+          {{ errorMsg }}
+        </div>
         <div class="form-group">
           <label for="">Username</label>
           <input
@@ -10,6 +13,7 @@
             class="form-control"
             v-model="username"
             placeholder="Username"
+            required
           />
         </div>
         <div class="form-group">
@@ -28,15 +32,7 @@
             class="form-control"
             v-model="password"
             placeholder="Password"
-          />
-        </div>
-        <div class="form-group">
-          <label for="">Confirm password</label>
-          <input
-            type="tepasswordxt"
-            class="form-control"
-            v-model="password_confirm"
-            placeholder="Confirm password"
+            required
           />
         </div>
         <button class="btn btn-primary btn-block">Sign Up</button>
@@ -46,6 +42,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { api_url } from '../../utils/const';
 
 export default {
   name: 'Register',
@@ -55,29 +52,28 @@ export default {
       username: '',
       email: '',
       password: '',
-      password_confirm: '',
+      error: false,
+      errorMsg: '',
     };
   },
   methods: {
     async handleSubmit() {
-      // console.log('data');
-
-      // const data = {
-      //     username: this.username,
-      //     email: this.email,
-      //     passwd: this.password,
-      //     password_confirm: this.password_confirm
-      // }
-      // console.log(data);
-
-      await axios.post('https://np-prj-services.herokuapp.com/users/signin', {
-        username: this.username,
-        email: this.email,
-        passwd: this.password,
-        password_confirm: this.password_confirm,
-      });
-      this.$router.push('login');
-      // console.log(response);
+      try {
+        const response = await axios.post(`${api_url}/users/signin`, {
+          username: this.username,
+          email: this.email,
+          passwd: this.password,
+        });
+        this.$store.getters.socket.sendObj({
+          type: 'login',
+          args: [response.data.data],
+        });
+        this.$router.push('home');
+      } catch (err) {
+        const msgs = err.response.data.message.split(':');
+        this.error = true;
+        this.errorMsg = msgs[msgs.length - 1];
+      }
     },
   },
 };
