@@ -61,7 +61,6 @@ export default {
   data() {
     return {
       file_id: null,
-      content: '',
       consoleMessages: {
         message: 'Code run here',
         class: 'log log--string',
@@ -75,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'socket', 'file_content', 'ws_id']),
+    ...mapGetters(['user', 'socket', 'file_content', 'content', 'ws_id']),
     consoleLogList() {
       return document.querySelector('.editor__console-logs');
     },
@@ -104,10 +103,11 @@ export default {
     );
 
     this.editor.on('change', (e) => {
-      this.content = this.editor.getValue();
+      let content = this.editor.getValue();
+      this.$store.dispatch('setContent_', content);
       if (this.file_id && this.change_by && this.change_by === this.ws_id) {
         let encoder = new TextEncoder();
-        let lines = this.content.split('\n');
+        let lines = content.split('\n');
         let string = e.lines.join('\n');
         let from =
           lines

@@ -2,7 +2,7 @@
   <div class="container">
     <div class="table__wrap">
       <button class="btn btn-primary">
-        <router-link to="/home">Return</router-link>
+        <router-link :to="`/home/${old_file}`">Return</router-link>
       </button>
       <table v-if="user_pers.length" class="table table-striped table-hover">
         <thead>
@@ -49,6 +49,7 @@
 <script>
 export default {
   name: 'File',
+  props: ['old_file'],
   computed: {
     user_pers() {
       return this.$store.getters.user_pers;

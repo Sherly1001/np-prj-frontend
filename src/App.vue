@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <Header />
-    <router-view :user_pers="user_pers" />
+    <router-view
+      :user_pers="user_pers"
+      :old_file="file_content ? file_content.file_id : ''"
+    />
   </div>
 </template>
 
@@ -27,7 +30,7 @@ export default {
     return { cookies };
   },
   computed: {
-    ...mapGetters(['editor', 'ws_id']),
+    ...mapGetters(['editor', 'ws_id', 'file_content']),
   },
   created() {
     const ws = new WebSocket(`${ws_url}/ws?token=${this.cookies.get('token')}`);
@@ -84,6 +87,10 @@ export default {
       } else if (data['set-user-pointer']) {
         let pos = data['set-user-pointer'];
         this.editor._set_cursor(pos);
+      } else if (data['create-file']) {
+        alert(`file created with id: ${data['create-file'].file_id}`);
+        this.$store.dispatch('setContent', data['create-file']);
+        this.$router.push(`/home/${data['create-file'].file_id}`);
       }
     };
     this.$store.dispatch('setSocket', ws);

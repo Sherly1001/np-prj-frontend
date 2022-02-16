@@ -67,10 +67,21 @@ export default {
       this.$router.push('login');
     },
     handleShare() {
-      if (this.$store.getters.user) {
-        console.log('ha');
-      } else {
-        console.log('ha');
+      if (this.$store.getters.user && !this.$store.getters.file_content) {
+        this.$store.getters.socket.sendObj({
+          type: 'create-file',
+          args: [
+            this.$store.getters.user.id,
+            3,
+            0,
+            this.$store.getters.content,
+          ],
+        });
+      } else if (!this.$store.getters.file_content) {
+        this.$store.getters.socket.sendObj({
+          type: 'create-file',
+          args: ['0', 3, 0, this.$store.getters.content],
+        });
       }
     },
   },

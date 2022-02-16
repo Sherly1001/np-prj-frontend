@@ -6,6 +6,7 @@ const store = createStore({
       curUser: null,
       ws_id: null,
       socket: null,
+      content: '',
       file_content: null,
       user_pers: [],
       editor: null,
@@ -15,6 +16,7 @@ const store = createStore({
     user: (state) => state.curUser,
     socket: (state) => state.socket,
     file_content: (state) => state.file_content,
+    content: (state) => state.content,
     user_pers: (state) => state.user_pers,
     ws_id: (state) => state.ws_id,
     editor: (state) => state.editor,
@@ -28,6 +30,9 @@ const store = createStore({
     },
     file_content(state, content) {
       state.file_content = content;
+    },
+    content(state, content) {
+      state.content = content;
     },
     user_pers(state, userPer) {
       state.user_pers = userPer;
@@ -48,6 +53,9 @@ const store = createStore({
     },
     setContent(context, newContent) {
       context.commit('file_content', newContent);
+    },
+    setContent_(context, newContent) {
+      context.commit('content', newContent);
     },
     setUserPers(context, newUserPer) {
       context.commit('user_pers', newUserPer);
