@@ -39,10 +39,13 @@ export default {
       }
     };
     ws.sendObj({ type: 'get-user-pers', args: [] });
+    // ws.sendObj({type:'create-file', args:['280719123468652544', 3, 0, 'content here']})
+    // ws.sendObj({type:'create-file', args:['281370142825385984', 3, 0, 'content here']})
+    // ws.sendObj({type:'set-user-per', args:['281750964610928640', '280719123468652544', 3]})
 
     ws.onmessage = (m) => {
       let data = JSON.parse(m.data);
-      // console.log(data["get-user-pers"]);
+      console.log(data);
 
       if (data.accept) {
         this.$store.dispatch('handleUserLogin', data.accept.user);

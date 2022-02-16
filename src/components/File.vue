@@ -4,19 +4,37 @@
       <button class="btn btn-primary">
         <router-link to="/home">Return</router-link>
       </button>
-      <table class="table">
+      <table v-if="user_pers.length" class="table table-striped table-hover">
         <thead>
           <tr>
-            <th scope="col">File Id</th>
+            <th scope="col">Owner Files</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user_per in user_pers" :key="user_per">
-            <td>{{ user_per.file_id }}</td>
+          <tr v-for="file in owner_files" :key="file">
+            <td>{{ file.file_id }}</td>
             <td>
               <button
                 class="btn btn-sm btn-primary"
-                @click="handleClick(user_per.file_id)"
+                @click="handleClick(file.file_id)"
+              >
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <thead>
+          <tr>
+            <th scope="col">Shared Files</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="file in shared_files" :key="file">
+            <td>{{ file.file_id }}</td>
+            <td>
+              <button
+                class="btn btn-sm btn-primary"
+                @click="handleClick(file.file_id)"
               >
                 View
               </button>
@@ -32,8 +50,17 @@
 export default {
   name: 'File',
   props: ['user_pers'],
+  computed: {
+    owner_files: function () {
+      return this.user_pers.filter((file) => file.is_owner);
+    },
+    shared_files: function () {
+      return this.user_pers.filter((file) => !file.is_owner);
+    },
+  },
   methods: {
     handleClick(file_id) {
+      console.log('hhiihihi:', this.user_pers);
       // console.log(file_id);
       this.$router.push(`/home/${file_id}`);
     },
@@ -41,10 +68,6 @@ export default {
 };
 </script>
 <style scoped>
-.table {
-  /* width: 60%; */
-}
-
 .table__wrap {
   width: 60%;
 }
@@ -52,8 +75,5 @@ export default {
 .btn a {
   color: white;
   text-decoration: none;
-}
-
-.btn-return {
 }
 </style>
