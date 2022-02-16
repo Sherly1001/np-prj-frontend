@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     handleClick(file_id) {
-      console.log('hhiihihi:', this.user_pers);
       // console.log(file_id);
       this.$router.push(`/home/${file_id}`);
     },

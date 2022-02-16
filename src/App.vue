@@ -11,6 +11,7 @@ import Header from './components/Header.vue';
 import { ws_url } from './utils/const';
 // import { mapGetters } from 'vuex';
 
+
 export default {
   name: 'App',
   data() {
@@ -24,6 +25,7 @@ export default {
   setup() {
     const { cookies } = useCookies();
     return { cookies };
+    
   },
   computed: {
     // ...mapGetters(['user_pers']),
@@ -40,6 +42,8 @@ export default {
     };
     ws.sendObj({ type: 'get-user-pers', args: [] });
     // ws.sendObj({type:'create-file', args:['280719123468652544', 3, 0, 'content here']})
+    // ws.sendObj({type:'get-per-types', args:[]})
+
     // ws.sendObj({type:'create-file', args:['281370142825385984', 3, 0, 'content here']})
     // ws.sendObj({type:'set-user-per', args:['281750964610928640', '280719123468652544', 3]})
 

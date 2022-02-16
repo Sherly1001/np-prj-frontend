@@ -7,7 +7,7 @@
       <div v-if="user" class="header--right">
         <button type="button" class="btn btn-primary">
           Share
-          <fa icon="plus" />
+          <fa icon="user-plus" />
         </button>
         <!-- <div class="avatar"></div> -->
         <div
@@ -44,12 +44,16 @@
           <router-link to="/login">Login</router-link>
         </div>
       </div>
+
+      
     </div>
   </section>
 </template>
 <script>
 import { useCookies } from 'vue3-cookies';
 import { mapGetters } from 'vuex';
+
+
 export default {
   name: 'Header',
   setup() {
