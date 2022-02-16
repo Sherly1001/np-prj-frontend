@@ -25,8 +25,8 @@ const store = createStore({
     file_content(state, content) {
       state.file_content = content;
     },
-    user_pers(state, content) {
-      state.user_pers = content;
+    user_pers(state, userPer) {
+      state.user_pers = userPer;
     },
   },
   actions: {

@@ -3,31 +3,9 @@
     <div class="main__wrapper">
       <div class="editor">
         <div class="editor__wrapper">
-          <div
-            v-show="user_pers.length"
-            class="btn-group mb-2"
-            style="width: 30px"
-          >
-            <button
-              type="button"
-              class="btn btn-sm btn-primary dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Get User Pers?
-            </button>
-            <ul class="dropdown-menu">
-              <li
-                @click="handleClick(user_per.file_id)"
-                v-for="user_per in user_pers"
-                :key="user_per"
-              >
-                <a class="dropdown-item" href="javascript:void(0)">{{
-                  user_per.file_id
-                }}</a>
-              </li>
-            </ul>
-          </div>
+          <button class="btn btn-sm btn-primary mb-2" style="width: 120px">
+            <router-link to="/file">Get User Pers</router-link>
+          </button>
           <!-- <div v-for="per in user_pers" :key="per">{{per.file_id}}</div> -->
           <div class="editor__body">
             <div
@@ -91,7 +69,7 @@ export default {
       cursors_marker: {},
     };
   },
-  props: ['user_pers'],
+  //   props: ['user_pers'],
 
   computed: {
     ...mapGetters(['user', 'socket', 'file_content']),
@@ -302,5 +280,10 @@ export default {
 
 .ace_gutter {
   border-left: 5px solid var(--editor-border);
+}
+
+.btn a {
+  color: white;
+  text-decoration: none;
 }
 </style>

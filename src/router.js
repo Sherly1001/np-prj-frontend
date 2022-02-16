@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 import Editor from './components/editor/Editor.vue';
 import Login from './components/user/Login.vue';
+import File from './components/File.vue';
 import Register from './components/user/Register.vue';
 
 const routers = [
@@ -17,6 +18,10 @@ const routers = [
   {
     path: '/login',
     component: Login,
+  },
+  {
+    path: '/file',
+    component: File,
   },
   {
     path: '/:pathMatch(.*)*',

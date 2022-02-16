@@ -58,7 +58,7 @@ export default {
       if (data['get-user-pers']) {
         this.user_pers = data['get-user-pers'];
         // this.$store.dispatch('setUserPers', data["get-user-pers"]);
-        // console.log(this.user_pers)
+        console.log(this.user_pers);
       }
     };
     this.$store.dispatch('setSocket', ws);
