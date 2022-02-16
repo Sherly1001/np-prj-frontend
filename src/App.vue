@@ -42,7 +42,7 @@ export default {
 
     ws.onmessage = (m) => {
       let data = JSON.parse(m.data);
-      console.log(data);
+      // console.log(data);
 
       if (data.accept) {
         if (data.accept.user) ws.sendObj({ type: 'get-user-pers', args: [] });

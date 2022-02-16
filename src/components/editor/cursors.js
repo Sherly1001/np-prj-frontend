@@ -333,8 +333,14 @@ export class CursorMaker {
         animals[Math.floor(Math.random() * animals.length)]
       }`;
     }
-    this.cursors[id] = Object.assign(this.cursors[id] || {}, cursor);
-    console.log(this.cursors);
+
+    let cr = this.cursors[id];
+    if (cr) {
+      cr.row = cursor.row;
+      cr.column = cursor.column;
+    } else {
+      this.cursors[id] = cursor;
+    }
   }
 
   removeCursor(name) {
