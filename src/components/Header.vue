@@ -4,13 +4,12 @@
       <div class="header--left">
         <router-link to="/home">Collaborative coding</router-link>
       </div>
-      <div v-if="user" class="header--right">
-        <button type="button" class="btn btn-primary">
+      <div class="header--right">
+        <button type="button" class="btn btn-primary header--right_item">
           Share
           <fa icon="user-plus" />
         </button>
-        <!-- <div class="avatar"></div> -->
-        <div
+        <div v-if="user"
           class="header--right_item"
           id="dropdownMenuButton1"
           data-bs-toggle="dropdown"
@@ -32,17 +31,15 @@
             </a>
           </li>
         </ul>
-        <!-- <div class="header--right_item">
-          <a href="javascript:void(0)" @click="handleLogout"> Logout </a>
-        </div> -->
-      </div>
-      <div v-else class="header--right">
-        <div class="header--right_item">
+        <div class="d-flex" v-if=!user>
+          <div class="header--right_item">
           <router-link to="/register">Register</router-link>
         </div>
         <div class="header--right_item">
           <router-link to="/login">Login</router-link>
         </div>
+        </div>
+        
       </div>
 
       

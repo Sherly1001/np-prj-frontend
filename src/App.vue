@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { useCookies } from 'vue3-cookies';
 import Header from './components/Header.vue';
 import { ws_url } from './utils/const';
@@ -28,7 +29,7 @@ export default {
     
   },
   computed: {
-    // ...mapGetters(['user_pers']),
+    ...mapGetters(['editor', 'ws_id']),
   },
   created() {
     const ws = new WebSocket(`${ws_url}/ws?token=${this.cookies.get('token')}`);
@@ -40,32 +41,53 @@ export default {
         setTimeout(() => ws.sendObj(data));
       }
     };
-    ws.sendObj({ type: 'get-user-pers', args: [] });
-    // ws.sendObj({type:'create-file', args:['280719123468652544', 3, 0, 'content here']})
-    // ws.sendObj({type:'get-per-types', args:[]})
-
-    // ws.sendObj({type:'create-file', args:['281370142825385984', 3, 0, 'content here']})
-    // ws.sendObj({type:'set-user-per', args:['281750964610928640', '280719123468652544', 3]})
 
     ws.onmessage = (m) => {
       let data = JSON.parse(m.data);
-      console.log(data);
+      // console.log(data);
 
       if (data.accept) {
+        if (data.accept.user) ws.sendObj({ type: 'get-user-pers', args: [] });
         this.$store.dispatch('handleUserLogin', data.accept.user);
+        this.$store.dispatch('setWsid', data.accept.ws_id);
       } else if (data.get) {
         if (data.get.error) {
           // handler when can't open file
+          console.log(data.get.error);
           alert(data.get.error);
           this.$router.push('/home');
         } else {
           this.$store.dispatch('setContent', data.get);
         }
-      }
-      if (data['get-user-pers']) {
+      } else if (data.insert) {
+        if (data.insert.error) {
+          console.log(data.insert.error);
+          this.editor._remove(data.event, null);
+        } else {
+          this.editor._insert(
+            data.event.start,
+            data.insert.string,
+            data.event.ws_id
+          );
+        }
+      } else if (data.remove) {
+        if (data.remove.error) {
+          console.log(data.remove.error);
+          this.editor._insert(
+            data.event.start,
+            data.event.lines.join('\n'),
+            null
+          );
+        } else {
+          this.editor._remove(data.event, data.event.ws_id);
+        }
+      } else if (data['get-user-pers']) {
         this.user_pers = data['get-user-pers'];
         // this.$store.dispatch('setUserPers', data["get-user-pers"]);
         console.log(this.user_pers);
+      } else if (data['set-user-pointer']) {
+        let pos = data['set-user-pointer'];
+        this.editor._set_cursor(pos);
       }
     };
     this.$store.dispatch('setSocket', ws);
