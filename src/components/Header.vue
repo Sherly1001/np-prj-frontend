@@ -9,7 +9,8 @@
           Share
           <fa icon="user-plus" />
         </button>
-        <div v-if="user"
+        <div v-if="user">
+          <div
           class="header--right_item"
           id="dropdownMenuButton1"
           data-bs-toggle="dropdown"
@@ -31,7 +32,8 @@
             </a>
           </li>
         </ul>
-        <div class="d-flex" v-if=!user>
+        </div>
+        <div class="d-flex" v-else>
           <div class="header--right_item">
           <router-link to="/register">Register</router-link>
         </div>
