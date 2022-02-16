@@ -67,18 +67,16 @@ export default {
       editor: null,
       cursors: {},
       cursors_marker: {},
+      change_by: null,
     };
   },
-  //   props: ['user_pers'],
-
   computed: {
-    ...mapGetters(['user', 'socket', 'file_content']),
+    ...mapGetters(['user', 'socket', 'file_content', 'ws_id']),
     consoleLogList() {
       return document.querySelector('.editor__console-logs');
     },
   },
   mounted() {
-    // this.socket.sendObj({type:'create-file', args:['280719123468652544', 3, 0, 'content here dkshkj']})
     if (this.$route.params.file_id.match(/\d+/)) {
       this.file_id = this.$route.params.file_id;
       this.socket.sendObj({
@@ -87,7 +85,7 @@ export default {
       });
     } else {
       this.file_id = null;
-      this.$router.push('/home');
+      // this.$router.push('/home');
     }
 
     this.editor = markRaw(
@@ -101,30 +99,72 @@ export default {
       })
     );
 
-    this.editor.on('change', () => {
+    this.editor.on('change', (e) => {
       this.content = this.editor.getValue();
+      if (this.file_id && this.change_by && this.change_by === this.ws_id) {
+        let encoder = new TextEncoder();
+        let lines = this.content.split('\n');
+        let string = e.lines.join('\n');
+        let from =
+          lines
+            .slice(0, e.start.row)
+            .reduce((acc, l) => acc + encoder.encode(l).length + 1, 0) +
+          encoder.encode(lines[e.start.row].slice(0, e.start.column)).length;
+        let to = from + encoder.encode(string).length;
+        let user_id = this.user ? this.user.id : '0';
+
+        e.ws_id = this.ws_id;
+        if (e.action === 'insert') {
+          this.socket.sendObj({
+            type: 'insert',
+            args: [this.file_id, user_id, from, to, string, e],
+          });
+        } else if (e.action === 'remove') {
+          this.socket.sendObj({
+            type: 'remove',
+            args: [this.file_id, user_id, from, to, e],
+          });
+        }
+      }
+      this.change_by = this.ws_id;
     });
 
+    this.editor._insert = (range, string, ws_id) => {
+      if (this.ws_id !== ws_id) {
+        this.change_by = ws_id;
+        this.editor.session.insert(range, string);
+      }
+    };
+
+    this.editor._remove = (range, ws_id) => {
+      if (this.ws_id !== ws_id) {
+        this.change_by = ws_id;
+        this.editor.session.remove(range);
+      }
+    };
+
     this.editor.on('changeSelection', () => {
-      this.cursors_marker.redraw();
+      // this.cursors_marker.redraw();
     });
+
+    this.$store.dispatch('setEditor', this.editor);
 
     setTimeout(() => {
       this.cursors_marker = new CursorMaker(this.editor.session, this.cursors);
       this.editor.session.addDynamicMarker(this.cursors_marker, true);
 
       /*
-        this.cursors_marker.addCursor('sher', {
-            row: 3,
-            column: 3,
-            color: 'red',
-        });
-        this.cursors_marker.addCursor('noob', {
-            row: 4,
-            column: 4,
-            color: 'blue',
-        });
-        */
+      this.cursors_marker.addCursor('sher', {
+        row: 3,
+        column: 3,
+        color: 'red',
+      });
+      this.cursors_marker.addCursor('noob', {
+        row: 4,
+        column: 4,
+        color: 'blue',
+      });
+      */
     });
   },
   watch: {
@@ -136,7 +176,11 @@ export default {
     },
     file_content(newVal) {
       if (newVal) {
-        this.editor.setValue(newVal.contents[0].content);
+        if (newVal.contents[0].content === '') {
+          this.change_by = this.ws_id;
+        } else {
+          this.editor.setValue(newVal.contents[0].content);
+        }
         this.editor.moveCursorTo(0, 0);
       }
     },
@@ -162,7 +206,6 @@ export default {
       }
     },
   },
-
   methods: {
     handleClick(file_id) {
       // console.log(file_id);
