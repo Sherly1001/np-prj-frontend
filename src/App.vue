@@ -12,7 +12,6 @@ import Header from './components/Header.vue';
 import { ws_url } from './utils/const';
 // import { mapGetters } from 'vuex';
 
-
 export default {
   name: 'App',
   data() {
@@ -26,7 +25,6 @@ export default {
   setup() {
     const { cookies } = useCookies();
     return { cookies };
-    
   },
   computed: {
     ...mapGetters(['editor', 'ws_id']),
@@ -82,9 +80,7 @@ export default {
           this.editor._remove(data.event, data.event.ws_id);
         }
       } else if (data['get-user-pers']) {
-        this.user_pers = data['get-user-pers'];
-        // this.$store.dispatch('setUserPers', data["get-user-pers"]);
-        console.log(this.user_pers);
+        this.$store.dispatch('setUserPers', data['get-user-pers']);
       } else if (data['set-user-pointer']) {
         let pos = data['set-user-pointer'];
         this.editor._set_cursor(pos);

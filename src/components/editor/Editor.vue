@@ -3,8 +3,12 @@
     <div class="main__wrapper">
       <div class="editor">
         <div class="editor__wrapper">
-          <button class="btn btn-sm btn-primary mb-2" style="width: 120px">
-            <router-link to="/file">Get User Pers</router-link>
+          <button
+            class="btn btn-sm btn-primary mb-2"
+            style="width: 120px"
+            @click="socket.sendObj({ type: 'get-user-pers', args: [] })"
+          >
+            <router-link to="/file">List All Files</router-link>
           </button>
           <!-- <div v-for="per in user_pers" :key="per">{{per.file_id}}</div> -->
           <div class="editor__body">

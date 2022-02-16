@@ -49,18 +49,19 @@
 <script>
 export default {
   name: 'File',
-  props: ['user_pers'],
   computed: {
+    user_pers() {
+      return this.$store.getters.user_pers;
+    },
     owner_files: function () {
-      return this.user_pers.filter((file) => file.is_owner);
+      return this.$store.getters.user_pers.filter((file) => file.is_owner);
     },
     shared_files: function () {
-      return this.user_pers.filter((file) => !file.is_owner);
+      return this.$store.getters.user_pers.filter((file) => !file.is_owner);
     },
   },
   methods: {
     handleClick(file_id) {
-      // console.log(file_id);
       this.$router.push(`/home/${file_id}`);
     },
   },

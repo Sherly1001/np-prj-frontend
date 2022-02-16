@@ -5,53 +5,53 @@
         <router-link to="/home">Collaborative coding</router-link>
       </div>
       <div class="header--right">
-        <button type="button" class="btn btn-primary header--right_item">
+        <button
+          type="button"
+          class="btn btn-primary header--right_item"
+          @click="handleShare()"
+        >
           Share
           <fa icon="user-plus" />
         </button>
         <div v-if="user">
           <div
-          class="header--right_item"
-          id="dropdownMenuButton1"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <a href="javascript:void(0)">
-            <span class="username">{{ user.username }}</span>
-            <fa icon="sort-down" />
-          </a>
-        </div>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li>
-            <a
-              style="color: black"
-              href="javascript:void(0)"
-              @click="handleLogout"
-            >
-              Logout
+            class="header--right_item"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <a href="javascript:void(0)">
+              <span class="username">{{ user.username }}</span>
+              <fa icon="sort-down" />
             </a>
-          </li>
-        </ul>
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <a
+                style="color: black"
+                href="javascript:void(0)"
+                @click="handleLogout"
+              >
+                Logout
+              </a>
+            </li>
+          </ul>
         </div>
         <div class="d-flex" v-else>
           <div class="header--right_item">
-          <router-link to="/register">Register</router-link>
+            <router-link to="/register">Register</router-link>
+          </div>
+          <div class="header--right_item">
+            <router-link to="/login">Login</router-link>
+          </div>
         </div>
-        <div class="header--right_item">
-          <router-link to="/login">Login</router-link>
-        </div>
-        </div>
-        
       </div>
-
-      
     </div>
   </section>
 </template>
 <script>
 import { useCookies } from 'vue3-cookies';
 import { mapGetters } from 'vuex';
-
 
 export default {
   name: 'Header',
@@ -63,7 +63,15 @@ export default {
     handleLogout() {
       this.cookies.remove('token');
       this.$store.dispatch('handleUserLogin', null);
+      this.$store.dispatch('setUserPers', []);
       this.$router.push('login');
+    },
+    handleShare() {
+      if (this.$store.getters.user) {
+        console.log('ha');
+      } else {
+        console.log('ha');
+      }
     },
   },
   computed: {
