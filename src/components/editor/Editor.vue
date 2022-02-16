@@ -143,8 +143,17 @@ export default {
       }
     };
 
+    this.editor._set_cursor = (pos) => {
+      this.cursors_marker.addCursor(pos.ws_id, pos);
+    };
+
     this.editor.on('changeSelection', () => {
-      // this.cursors_marker.redraw();
+      if (!this.file_id) return;
+      let pos = this.editor.getCursorPosition();
+      this.socket.sendObj({
+        type: 'set-user-pointer',
+        args: [this.file_id, pos.row, pos.column],
+      });
     });
 
     this.$store.dispatch('setEditor', this.editor);

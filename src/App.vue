@@ -83,6 +83,9 @@ export default {
         this.user_pers = data['get-user-pers'];
         // this.$store.dispatch('setUserPers', data["get-user-pers"]);
         console.log(this.user_pers);
+      } else if (data['set-user-pointer']) {
+        let pos = data['set-user-pointer'];
+        this.editor._set_cursor(pos);
       }
     };
     this.$store.dispatch('setSocket', ws);
