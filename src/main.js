@@ -7,7 +7,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(faSortDown, faPlus);
@@ -19,8 +18,8 @@ import store from './store';
 import router from './router';
 
 createApp(App)
-    .use(router)
-    .use(store)
-    .use(vueAxios, axios)
-    .component('fa', FontAwesomeIcon)
-    .mount('#app');
+  .use(router)
+  .use(store)
+  .use(vueAxios, axios)
+  .component('fa', FontAwesomeIcon)
+  .mount('#app');

@@ -5,7 +5,8 @@
         <router-link to="/home">Collaborative coding</router-link>
       </div>
       <div v-if="user" class="header--right">
-        <button type="button" class="btn btn-primary">Share
+        <button type="button" class="btn btn-primary">
+          Share
           <fa icon="plus" />
         </button>
         <!-- <div class="avatar"></div> -->

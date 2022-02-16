@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header />
-    <router-view :user_pers="user_pers"/>
+    <router-view :user_pers="user_pers" />
   </div>
 </template>
 
@@ -15,8 +15,8 @@ export default {
   name: 'App',
   data() {
     return {
-      user_pers: []
-    }
+      user_pers: [],
+    };
   },
   components: {
     Header,
@@ -38,12 +38,12 @@ export default {
         setTimeout(() => ws.sendObj(data));
       }
     };
-    ws.sendObj({type:'get-user-pers', args:[]})
+    ws.sendObj({ type: 'get-user-pers', args: [] });
 
     ws.onmessage = (m) => {
       let data = JSON.parse(m.data);
       // console.log(data["get-user-pers"]);
-      
+
       if (data.accept) {
         this.$store.dispatch('handleUserLogin', data.accept.user);
       } else if (data.get) {
@@ -55,14 +55,14 @@ export default {
           this.$store.dispatch('setContent', data.get);
         }
       }
-      if(data["get-user-pers"]) {
-        this.user_pers = data["get-user-pers"];
+      if (data['get-user-pers']) {
+        this.user_pers = data['get-user-pers'];
         // this.$store.dispatch('setUserPers', data["get-user-pers"]);
         // console.log(this.user_pers)
       }
     };
     this.$store.dispatch('setSocket', ws);
-    
+
     // ws.onmessage = (m) => {
     //     let data = JSON.parse(m.data);
     //     // this.user_pers = data["get-user-pers"]

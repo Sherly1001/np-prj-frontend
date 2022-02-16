@@ -6,7 +6,7 @@ const store = createStore({
       curUser: null,
       socket: null,
       file_content: null,
-      user_pers: []
+      user_pers: [],
     };
   },
   getters: {
